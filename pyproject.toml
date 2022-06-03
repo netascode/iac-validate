@@ -8,7 +8,7 @@ maintainers = ["Daniel Schmidt <danischm@cisco.com>"]
 name = "iac-validate"
 readme = "README.md"
 repository = "https://github.com/netascode/iac-validate"
-version = "0.1.0"
+version = "0.1.1"
 
 [tool.poetry.scripts]
 iac-validate = "iac_validate.cli.main:main"
