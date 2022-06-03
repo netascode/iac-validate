@@ -1,0 +1,15 @@
+class Rule:
+    id = "101"
+    description = "Verify child naming restrictions"
+    severity = "HIGH"
+
+    @classmethod
+    def match(cls, data):
+        results = []
+        try:
+            for child in data["root"]["children"]:
+                if child["name"] == "FORBIDDEN":
+                    results.append("root.children.name" + " - " + str(child["name"]))
+        except KeyError:
+            pass
+        return results
