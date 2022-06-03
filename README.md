@@ -40,3 +40,13 @@ class Rule:
             pass
         return results
 ```
+
+## Installation
+
+Python 3.6+ is required to install `iac-validate`. Don't have Python 3.6 or later? See [Python 3 Installation & Setup Guide](https://realpython.com/installing-python/).
+
+`iac-validate` can be installed in a virtual environment using `pip`:
+
+```shell
+pip install iac-validate
+```
