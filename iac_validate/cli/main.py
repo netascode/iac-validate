@@ -4,6 +4,7 @@
 
 import logging
 import sys
+from typing import List
 
 import click
 import errorhandler
@@ -49,7 +50,7 @@ def configure_logging(level: str) -> None:
 @options.path
 @options.schema
 @options.rules
-def main(verbosity: str, path: str, schema: str, rules: str) -> None:
+def main(verbosity: str, path: List[str], schema: str, rules: str) -> None:
     """A CLI tool to perform syntactic and semantic validation of YAML files."""
     configure_logging(verbosity)
 

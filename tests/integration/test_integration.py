@@ -28,6 +28,39 @@ def test_validate():
     assert result.exit_code == 0
 
 
+def test_validate_additional_data():
+    runner = CliRunner()
+    input_path = "tests/integration/fixtures/data/"
+    input_path_2 = "tests/integration/fixtures/additional_data/"
+    schema_path = "tests/integration/fixtures/additional_data_schema/schema.yaml"
+    schema_path_fail = "tests/integration/fixtures/schema/schema.yaml"
+    rules_path = "tests/integration/fixtures/rules/"
+    result = runner.invoke(
+        iac_validate.cli.main.main,
+        [
+            "-s",
+            schema_path,
+            "-r",
+            rules_path,
+            input_path,
+            input_path_2,
+        ],
+    )
+    assert result.exit_code == 0
+    result = runner.invoke(
+        iac_validate.cli.main.main,
+        [
+            "-s",
+            schema_path_fail,
+            "-r",
+            rules_path,
+            input_path,
+            input_path_2,
+        ],
+    )
+    assert result.exit_code == 1
+
+
 def test_validate_syntax():
     runner = CliRunner()
     input_path = "tests/integration/fixtures/data_syntax_error/"

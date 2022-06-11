@@ -6,6 +6,7 @@ import importlib.util
 import logging
 import os
 import sys
+from typing import List
 
 import yamale
 from yamale.yamale_error import YamaleError
@@ -20,9 +21,9 @@ class Validator:
         if schema_path:
             logger.info("Loading schema")
             self.schema = yamale.make_schema(schema_path, parser="ruamel")
+        self.rules = {}
         if rules_path:
             logger.info("Loading rules")
-            self.rules = {}
             for filename in os.listdir(rules_path):
                 if filename.endswith(".py"):
                     file_path = os.path.join(rules_path, filename)
@@ -36,7 +37,7 @@ class Validator:
                             spec.loader.exec_module(mod)
                             self.rules[mod.Rule.id] = mod.Rule
 
-    def validate_syntax(self, input_path: str) -> bool:
+    def validate_syntax(self, input_paths: List[str]) -> bool:
         """Run syntactic validation"""
 
         def _validate_file(file_path: str) -> bool:
@@ -55,22 +56,23 @@ class Validator:
             return error
 
         error = False
-        if os.path.isfile(input_path):
-            if _validate_file(input_path):
-                error = True
-        else:
-            for dir, subdir, files in os.walk(input_path):
-                for filename in files:
-                    file_path = os.path.join(dir, filename)
-                    if _validate_file(file_path):
-                        error = True
+        for input_path in input_paths:
+            if os.path.isfile(input_path):
+                if _validate_file(input_path):
+                    error = True
+            else:
+                for dir, subdir, files in os.walk(input_path):
+                    for filename in files:
+                        file_path = os.path.join(dir, filename)
+                        if _validate_file(file_path):
+                            error = True
         return error
 
-    def validate_semantics(self, input_path: str) -> bool:
+    def validate_semantics(self, input_paths: List[str]) -> bool:
         """Run semantic validation"""
         error = False
-        logger.info("Loading yaml files from %s", input_path)
-        data = yaml.load_yaml_files(input_path)
+        logger.info("Loading yaml files from %s", input_paths)
+        data = yaml.load_yaml_files(input_paths)
 
         results = {}
         for rule in self.rules.values():

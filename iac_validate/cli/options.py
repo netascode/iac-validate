@@ -23,4 +23,5 @@ schema = click.option(
 path = click.argument(
     "path",
     type=click.Path(exists=True, dir_okay=True, file_okay=True),
+    nargs=-1,
 )
