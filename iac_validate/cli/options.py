@@ -20,8 +20,8 @@ schema = click.option(
     required=False,
 )
 
-path = click.argument(
-    "path",
+paths = click.argument(
+    "paths",
     type=click.Path(exists=True, dir_okay=True, file_okay=True),
     nargs=-1,
 )

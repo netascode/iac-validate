@@ -2,6 +2,8 @@
 
 # Copyright: (c) 2022, Daniel Schmidt <danischm@cisco.com>
 
+import os
+
 from click.testing import CliRunner
 import pytest
 
@@ -22,6 +24,23 @@ def test_validate():
             schema_path,
             "-r",
             rules_path,
+            input_path,
+        ],
+    )
+    assert result.exit_code == 0
+
+
+def test_validate_vault():
+    runner = CliRunner()
+    input_path = "tests/integration/fixtures/data_vault/"
+    schema_path = "tests/integration/fixtures/schema/schema.yaml"
+    os.environ["ANSIBLE_VAULT_ID"] = "dev"
+    os.environ["ANSIBLE_VAULT_PASSWORD"] = "Password123"
+    result = runner.invoke(
+        iac_validate.cli.main.main,
+        [
+            "-s",
+            schema_path,
             input_path,
         ],
     )

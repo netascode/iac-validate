@@ -47,18 +47,18 @@ def configure_logging(level: str) -> None:
     help="Either CRITICAL, ERROR, WARNING, INFO or DEBUG",
     default="WARNING",
 )
-@options.path
+@options.paths
 @options.schema
 @options.rules
-def main(verbosity: str, path: List[str], schema: str, rules: str) -> None:
+def main(verbosity: str, paths: List[str], schema: str, rules: str) -> None:
     """A CLI tool to perform syntactic and semantic validation of YAML files."""
     configure_logging(verbosity)
 
     validator = iac_validate.validator.Validator(schema, rules)
     if schema:
-        validator.validate_syntax(path)
+        validator.validate_syntax(paths)
     if rules:
-        validator.validate_semantics(path)
+        validator.validate_semantics(paths)
     exit()
 
 

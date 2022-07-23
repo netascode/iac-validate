@@ -50,3 +50,14 @@ Python 3.6+ is required to install `iac-validate`. Don't have Python 3.6 or late
 ```shell
 pip install iac-validate
 ```
+
+## Ansible Vault Support
+
+Values can be encrypted using [Ansible Vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html). This requires Ansible (`ansible-vault` command) to be installed and the following two environment variables to be defined:
+
+```shell
+export ANSIBLE_VAULT_ID=dev
+export ANSIBLE_VAULT_PASSWORD=Password123
+```
+
+`ANSIBLE_VAULT_ID` is optional, and if not defined will be omitted.

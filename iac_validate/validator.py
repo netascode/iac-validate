@@ -2,25 +2,59 @@
 
 # Copyright: (c) 2022, Daniel Schmidt <danischm@cisco.com>
 
+import importlib
 import importlib.util
 import logging
 import os
+import subprocess
 import sys
-from typing import List
+from typing import Any, List
 
 import yamale
 from yamale.yamale_error import YamaleError
+import yaml
 
-from iac_validate import yaml
+import iac_validate.yaml
 
 logger = logging.getLogger(__name__)
+
+
+class VaultTag(yaml.YAMLObject):
+    yaml_tag = "!vault"
+
+    def __init__(self, v: str):
+        self.value = v
+
+    def __repr__(self) -> str:
+        spec = importlib.util.find_spec("iac_validate.ansible_vault")
+        if spec:
+            if "ANSIBLE_VAULT_ID" in os.environ:
+                vault_id = os.environ["ANSIBLE_VAULT_ID"] + "@" + str(spec.origin)
+            else:
+                vault_id = str(spec.origin)
+            t = subprocess.check_output(
+                [
+                    "ansible-vault",
+                    "decrypt",
+                    "--vault-id",
+                    vault_id,
+                ],
+                input=self.value.encode(),
+            )
+            return t.decode()
+        return ""
+
+    @classmethod
+    def from_yaml(cls, loader: Any, node: Any) -> str:
+        return str(cls(node.value))
 
 
 class Validator:
     def __init__(self, schema_path: str, rules_path: str):
         if schema_path:
             logger.info("Loading schema")
-            self.schema = yamale.make_schema(schema_path, parser="ruamel")
+            self.schema = yamale.make_schema(schema_path)
+        self.errors: List[str] = []
         self.rules = {}
         if rules_path:
             logger.info("Loading rules")
@@ -47,12 +81,21 @@ class Validator:
                 ".yaml" in filename or ".yml" in filename
             ):
                 logger.info("Validate file: %s", filename)
-                data = yamale.make_data(file_path, parser="ruamel")
+                try:
+                    Loader = yaml.CSafeLoader
+                except AttributeError:  # System does not have libyaml
+                    Loader = yaml.SafeLoader  # type: ignore
+
+                Loader.add_constructor("!vault", VaultTag.from_yaml)
+                data = yamale.make_data(file_path)
                 try:
                     yamale.validate(self.schema, data, strict=True)
                 except YamaleError as e:
                     error = True
-                    logger.error(e.message.split("\n\t")[1])
+                    msg = e.message.split("\n\t")[1]
+                    logger.error(msg)
+                    self.errors.append(msg)
+
             return error
 
         error = False
@@ -72,7 +115,7 @@ class Validator:
         """Run semantic validation"""
         error = False
         logger.info("Loading yaml files from %s", input_paths)
-        data = yaml.load_yaml_files(input_paths)
+        data = iac_validate.yaml.load_yaml_files(input_paths)
 
         results = {}
         for rule in self.rules.values():
@@ -83,7 +126,7 @@ class Validator:
         if len(results) > 0:
             error = True
             for id, paths in results.items():
-                logger.error(
-                    "Rule {}: {} ({})".format(id, self.rules[id].description, paths)
-                )
+                msg = "Rule {}: {} ({})".format(id, self.rules[id].description, paths)
+                logger.error(msg)
+                self.errors.append(msg)
         return error
