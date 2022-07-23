@@ -34,6 +34,8 @@ pytest = "^6.1.2"
 pytest-cov = "^2.8.1"
 pytest-mock = "^3.0.0"
 toml = "^0.10.0"
+types-PyYAML = "^6.0.10"
+ansible-core = {version = "^2.13.2", python = ">=3.8"}
 
 [tool.coverage.run]
 source = ["iac_validate"]
