@@ -92,9 +92,11 @@ class Validator:
                     yamale.validate(self.schema, data, strict=True)
                 except YamaleError as e:
                     error = True
-                    msg = e.message.split("\n\t")[1]
-                    logger.error(msg)
-                    self.errors.append(msg)
+                    for result in e.results:
+                        print("Error validating data '%s' with '%s'\n\t" % (result.data, result.schema))
+                        for msg in result.errors:
+                            logger.error(msg)
+                            self.errors.append(msg)
 
             return error
 
@@ -125,6 +127,7 @@ class Validator:
                 results[rule.id] = paths
         if len(results) > 0:
             error = True
+            print("Semantic validation errors:")
             for id, paths in results.items():
                 msg = "Rule {}: {} ({})".format(id, self.rules[id].description, paths)
                 logger.error(msg)
