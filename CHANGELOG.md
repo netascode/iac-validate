@@ -1,4 +1,4 @@
-# 0.1.4 (unreleased)
+# 0.1.4
 
 - Add support for logging multiple error messsages
 
