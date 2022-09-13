@@ -8,7 +8,6 @@ from typing import Any, Dict, List
 
 import ruamel.yaml
 
-
 logger = logging.getLogger(__name__)
 
 
