@@ -14,7 +14,7 @@ import yamale
 from yamale.yamale_error import YamaleError
 import yaml
 
-import iac_validate.yaml
+from iac_validate.util import load_yaml_files
 
 logger = logging.getLogger(__name__)
 
@@ -93,8 +93,8 @@ class Validator:
                 except YamaleError as e:
                     error = True
                     for result in e.results:
-                        print("Error validating data '%s' with '%s'\n\t" % (result.data, result.schema))
-                        for msg in result.errors:
+                        for err in result.errors:
+                            msg = "Syntax error '{}': {}".format(result.data, err)
                             logger.error(msg)
                             self.errors.append(msg)
 
@@ -117,7 +117,7 @@ class Validator:
         """Run semantic validation"""
         error = False
         logger.info("Loading yaml files from %s", input_paths)
-        data = iac_validate.yaml.load_yaml_files(input_paths)
+        data = load_yaml_files(input_paths)
 
         results = {}
         for rule in self.rules.values():
@@ -127,9 +127,10 @@ class Validator:
                 results[rule.id] = paths
         if len(results) > 0:
             error = True
-            print("Semantic validation errors:")
             for id, paths in results.items():
-                msg = "Rule {}: {} ({})".format(id, self.rules[id].description, paths)
+                msg = "Semantic error, rule {}: {} ({})".format(
+                    id, self.rules[id].description, paths
+                )
                 logger.error(msg)
                 self.errors.append(msg)
         return error
