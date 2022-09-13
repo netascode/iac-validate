@@ -1,3 +1,7 @@
+# 0.1.4 (unreleased)
+
+- Add support for logging multiple error messsages
+
 # 0.1.3
 
 - Add support for Ansible Vault encrypted values
