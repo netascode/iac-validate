@@ -5,7 +5,7 @@
 
 A CLI tool to perform syntactic and semantic validation of YAML files.
 
-```shell
+```
 $ iac-validate -h
 Usage: iac-validate [OPTIONS] PATH
 
@@ -47,15 +47,33 @@ Python 3.6+ is required to install `iac-validate`. Don't have Python 3.6 or late
 
 `iac-validate` can be installed in a virtual environment using `pip`:
 
-```shell
+```
 pip install iac-validate
+```
+
+## Pre-Commit Hook
+
+The tool can be intregated via a [pre-commmit](https://pre-commit.com/) hook with the following config (`.pre-commit-config.yaml`):
+
+```
+repos:
+  - repo: https://github.com/netascode/iac-validate
+    rev: v0.1.5
+    hooks:
+      - id: iac-validate
+        args:
+          - '-s'
+          - 'my_schema.yaml'
+          - '-r'
+          - 'rules/'
+          - 'data.yaml'
 ```
 
 ## Ansible Vault Support
 
 Values can be encrypted using [Ansible Vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html). This requires Ansible (`ansible-vault` command) to be installed and the following two environment variables to be defined:
 
-```shell
+```
 export ANSIBLE_VAULT_ID=dev
 export ANSIBLE_VAULT_PASSWORD=Password123
 ```

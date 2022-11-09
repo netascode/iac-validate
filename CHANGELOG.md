@@ -1,3 +1,7 @@
+# 0.1.5 (unreleased)
+
+- Add pre-commit config
+
 # 0.1.4
 
 - Add support for logging multiple error messsages

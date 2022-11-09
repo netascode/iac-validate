@@ -1,0 +1,7 @@
+- id: iac-validate
+  name: Validate YAML files
+  description: This hook performs syntactic and semantic validation of YAML files.
+  entry: iac-validate
+  language: python
+  types: [file, yaml]
+  pass_filenames: false
