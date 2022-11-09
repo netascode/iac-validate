@@ -53,7 +53,7 @@ pip install iac-validate
 
 ## Pre-Commit Hook
 
-The tool can be intregated via a [pre-commmit](https://pre-commit.com/) hook with the following config (`.pre-commit-config.yaml`):
+The tool can be intregated via a [pre-commit](https://pre-commit.com/) hook with the following config (`.pre-commit-config.yaml`):
 
 ```
 repos:
