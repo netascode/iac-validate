@@ -1,5 +1,5 @@
 [![Tests](https://github.com/netascode/iac-validate/actions/workflows/test.yml/badge.svg)](https://github.com/netascode/iac-validate/actions/workflows/test.yml)
-![Python Support](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8%20%7C%203.9%20%7C%203.10-informational "Python Support: 3.6, 3.7, 3.8, 3.9, 3.10")
+![Python Support](https://img.shields.io/badge/python-3.7%20%7C%203.8%20%7C%203.9%20%7C%203.10-informational "Python Support: 3.7, 3.8, 3.9, 3.10")
 
 # iac-validate
 
@@ -43,7 +43,7 @@ class Rule:
 
 ## Installation
 
-Python 3.6+ is required to install `iac-validate`. Don't have Python 3.6 or later? See [Python 3 Installation & Setup Guide](https://realpython.com/installing-python/).
+Python 3.7+ is required to install `iac-validate`. Don't have Python 3.7 or later? See [Python 3 Installation & Setup Guide](https://realpython.com/installing-python/).
 
 `iac-validate` can be installed in a virtual environment using `pip`:
 
