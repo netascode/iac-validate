@@ -7,15 +7,17 @@ A CLI tool to perform syntactic and semantic validation of YAML files.
 
 ```
 $ iac-validate -h
-Usage: iac-validate [OPTIONS] PATH
+Usage: iac-validate [OPTIONS] [PATHS]...
 
   A CLI tool to perform syntactic and semantic validation of YAML files.
 
 Options:
   --version              Show the version and exit.
   -v, --verbosity LVL    Either CRITICAL, ERROR, WARNING, INFO or DEBUG
-  -s, --schema FILE      Path to schema file.
-  -r, --rules DIRECTORY  Path to semantic rules.
+  -s, --schema FILE      Path to schema file. (optional, default:
+                         '.schema.yaml', env: IAC_VALIDATE_SCHEMA)
+  -r, --rules DIRECTORY  Path to semantic rules. (optional, default:
+                         '.rules/', env: IAC_VALIDATE_RULES)
   -h, --help             Show this message and exit.
 ```
 
