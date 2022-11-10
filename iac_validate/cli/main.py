@@ -55,9 +55,10 @@ def main(verbosity: str, paths: List[str], schema: str, rules: str) -> None:
     configure_logging(verbosity)
 
     validator = iac_validate.validator.Validator(schema, rules)
+    error = False
     if schema:
-        validator.validate_syntax(paths)
-    if rules:
+        error = validator.validate_syntax(paths)
+    if rules and not error:
         validator.validate_semantics(paths)
     exit()
 

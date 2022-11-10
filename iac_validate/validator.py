@@ -71,47 +71,56 @@ class Validator:
                             spec.loader.exec_module(mod)
                             self.rules[mod.Rule.id] = mod.Rule
 
+    def _validate_syntax_file(self, file_path: str) -> None:
+        """Run syntactic validation for a single file"""
+        filename = os.path.basename(file_path)
+        if os.path.isfile(file_path) and (".yaml" in filename or ".yml" in filename):
+            logger.info("Validate file: %s", filename)
+            Loader = yaml.BaseLoader
+            Loader.add_constructor("!vault", VaultTag.from_yaml)
+            with open(file_path) as f:
+                yaml_content = f.read()
+            try:
+                yaml.load(yaml_content, Loader=Loader)
+            except yaml.error.MarkedYAMLError as e:
+                msg = "Syntax error '{}': Line {}, Column {} - {}".format(
+                    file_path,
+                    e.problem_mark.line + 1,
+                    e.problem_mark.column + 1,
+                    e.problem,
+                )
+                logger.error(msg)
+                self.errors.append(msg)
+                return
+            try:
+                Loader = yaml.CSafeLoader
+            except AttributeError:  # System does not have libyaml
+                Loader = yaml.SafeLoader  # type: ignore
+
+            Loader.add_constructor("!vault", VaultTag.from_yaml)
+            data = yamale.make_data(file_path)
+            try:
+                yamale.validate(self.schema, data, strict=True)
+            except YamaleError as e:
+                for result in e.results:
+                    for err in result.errors:
+                        msg = "Syntax error '{}': {}".format(result.data, err)
+                        logger.error(msg)
+                        self.errors.append(msg)
+
     def validate_syntax(self, input_paths: List[str]) -> bool:
         """Run syntactic validation"""
-
-        def _validate_file(file_path: str) -> bool:
-            error = False
-            filename = os.path.basename(file_path)
-            if os.path.isfile(file_path) and (
-                ".yaml" in filename or ".yml" in filename
-            ):
-                logger.info("Validate file: %s", filename)
-                try:
-                    Loader = yaml.CSafeLoader
-                except AttributeError:  # System does not have libyaml
-                    Loader = yaml.SafeLoader  # type: ignore
-
-                Loader.add_constructor("!vault", VaultTag.from_yaml)
-                data = yamale.make_data(file_path)
-                try:
-                    yamale.validate(self.schema, data, strict=True)
-                except YamaleError as e:
-                    error = True
-                    for result in e.results:
-                        for err in result.errors:
-                            msg = "Syntax error '{}': {}".format(result.data, err)
-                            logger.error(msg)
-                            self.errors.append(msg)
-
-            return error
-
-        error = False
         for input_path in input_paths:
             if os.path.isfile(input_path):
-                if _validate_file(input_path):
-                    error = True
+                self._validate_syntax_file(input_path)
             else:
                 for dir, subdir, files in os.walk(input_path):
                     for filename in files:
                         file_path = os.path.join(dir, filename)
-                        if _validate_file(file_path):
-                            error = True
-        return error
+                        self._validate_syntax_file(file_path)
+        if self.errors:
+            return True
+        return False
 
     def validate_semantics(self, input_paths: List[str]) -> bool:
         """Run semantic validation"""
