@@ -55,12 +55,22 @@ pip install iac-validate
 
 ## Pre-Commit Hook
 
-The tool can be intregated via a [pre-commit](https://pre-commit.com/) hook with the following config (`.pre-commit-config.yaml`):
+The tool can be integrated via a [pre-commit](https://pre-commit.com/) hook with the following config (`.pre-commit-config.yaml`), assuming the default values (`.schema.yaml`, `.rules/`) are appropriate:
 
 ```
 repos:
   - repo: https://github.com/netascode/iac-validate
-    rev: v0.1.5
+    rev: v0.1.6
+    hooks:
+      - id: iac-validate
+```
+
+In case the schema or validation rules are located somewhere else the required CLI arguments can be added like this:
+
+```
+repos:
+  - repo: https://github.com/netascode/iac-validate
+    rev: v0.1.6
     hooks:
       - id: iac-validate
         args:
@@ -68,7 +78,6 @@ repos:
           - 'my_schema.yaml'
           - '-r'
           - 'rules/'
-          - 'data.yaml'
 ```
 
 ## Ansible Vault Support
