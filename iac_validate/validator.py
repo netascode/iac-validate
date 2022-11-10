@@ -51,12 +51,13 @@ class VaultTag(yaml.YAMLObject):
 
 class Validator:
     def __init__(self, schema_path: str, rules_path: str):
-        if schema_path:
+        self.schema = None
+        if os.path.exists(schema_path):
             logger.info("Loading schema")
             self.schema = yamale.make_schema(schema_path)
         self.errors: List[str] = []
         self.rules = {}
-        if rules_path:
+        if os.path.exists(rules_path):
             logger.info("Loading rules")
             for filename in os.listdir(rules_path):
                 if filename.endswith(".py"):
@@ -76,6 +77,8 @@ class Validator:
         filename = os.path.basename(file_path)
         if os.path.isfile(file_path) and (".yaml" in filename or ".yml" in filename):
             logger.info("Validate file: %s", filename)
+
+            # YAML syntax validation
             base_loader = yaml.BaseLoader
             base_loader.add_constructor("!vault", VaultTag.from_yaml)
             with open(file_path) as f:
@@ -102,6 +105,9 @@ class Validator:
             except AttributeError:  # System does not have libyaml
                 Loader = yaml.SafeLoader  # type: ignore
 
+            # Schema syntax validation
+            if self.schema is None:
+                return
             Loader.add_constructor("!vault", VaultTag.from_yaml)
             data = yamale.make_data(file_path)
             try:
@@ -129,6 +135,9 @@ class Validator:
 
     def validate_semantics(self, input_paths: List[str]) -> bool:
         """Run semantic validation"""
+        if not self.rules:
+            return False
+
         error = False
         logger.info("Loading yaml files from %s", input_paths)
         data = load_yaml_files(input_paths)
