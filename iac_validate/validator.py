@@ -76,17 +76,22 @@ class Validator:
         filename = os.path.basename(file_path)
         if os.path.isfile(file_path) and (".yaml" in filename or ".yml" in filename):
             logger.info("Validate file: %s", filename)
-            Loader = yaml.BaseLoader
-            Loader.add_constructor("!vault", VaultTag.from_yaml)
+            base_loader = yaml.BaseLoader
+            base_loader.add_constructor("!vault", VaultTag.from_yaml)
             with open(file_path) as f:
                 yaml_content = f.read()
             try:
-                yaml.load(yaml_content, Loader=Loader)
+                yaml.load(yaml_content, Loader=base_loader)
             except yaml.error.MarkedYAMLError as e:
+                line = 0
+                column = 0
+                if e.problem_mark is not None:
+                    line = e.problem_mark.line + 1
+                    column = e.problem_mark.column + 1
                 msg = "Syntax error '{}': Line {}, Column {} - {}".format(
                     file_path,
-                    e.problem_mark.line + 1,
-                    e.problem_mark.column + 1,
+                    line,
+                    column,
                     e.problem,
                 )
                 logger.error(msg)
