@@ -4,4 +4,3 @@
   entry: iac-validate
   language: python
   types: [file, yaml]
-  pass_filenames: false
