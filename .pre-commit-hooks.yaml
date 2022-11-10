@@ -4,3 +4,4 @@
   entry: iac-validate
   language: python
   types: [file, yaml]
+  exclude: (^\..+\.ya?ml$)|(^.*\/\.[^\/]+\.ya?ml$) # exclude hidden files and folders
