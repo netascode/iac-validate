@@ -34,6 +34,7 @@ def configure_logging(level: str) -> None:
     handler.setFormatter(logging.Formatter("%(levelname)s - %(message)s"))
     logger.addHandler(handler)
     logger.setLevel(lev)
+    error_handler.reset()
 
 
 @click.command(context_settings=dict(help_option_names=["-h", "--help"]))
