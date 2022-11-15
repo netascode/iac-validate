@@ -1,4 +1,4 @@
-# 0.1.8 (unreleased)
+# 0.1.8
 
 - Use `ruamel.yaml` package consistently
 
