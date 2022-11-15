@@ -1,3 +1,7 @@
+# 0.1.8 (unreleased)
+
+- Use `ruamel.yaml` package consistently
+
 # 0.1.7
 
 - Add `output` CLI argument
