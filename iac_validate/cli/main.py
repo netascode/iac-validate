@@ -50,14 +50,20 @@ def configure_logging(level: str) -> None:
 @options.paths
 @options.schema
 @options.rules
-def main(verbosity: str, paths: List[str], schema: str, rules: str) -> None:
+@options.output
+def main(
+    verbosity: str, paths: List[str], schema: str, rules: str, output: str
+) -> None:
     """A CLI tool to perform syntactic and semantic validation of YAML files."""
     configure_logging(verbosity)
 
     validator = iac_validate.validator.Validator(schema, rules)
     error = validator.validate_syntax(paths)
-    if not error:
-        validator.validate_semantics(paths)
+    if error:
+        exit()
+    validator.validate_semantics(paths)
+    if output:
+        validator.write_output(paths, output)
     exit()
 
 

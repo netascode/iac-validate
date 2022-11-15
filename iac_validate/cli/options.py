@@ -24,6 +24,15 @@ schema = click.option(
     required=False,
 )
 
+output = click.option(
+    "-o",
+    "--output",
+    type=click.Path(exists=False, dir_okay=False, file_okay=True),
+    envvar="IAC_VALIDATE_OUTPUT",
+    help="Write merged content from YAML files to a new YAML file. (optional, env: IAC_VALIDATE_OUTPUT)",
+    required=False,
+)
+
 paths = click.argument(
     "paths",
     type=click.Path(exists=True, dir_okay=True, file_okay=True),

@@ -1,3 +1,7 @@
+# 0.1.7 (unreleased)
+
+- Add `output` CLI argument
+
 # 0.1.6
 
 - Add YAML syntax validation

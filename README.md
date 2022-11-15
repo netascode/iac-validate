@@ -18,6 +18,8 @@ Options:
                          '.schema.yaml', env: IAC_VALIDATE_SCHEMA)
   -r, --rules DIRECTORY  Path to semantic rules. (optional, default:
                          '.rules/', env: IAC_VALIDATE_RULES)
+  -o, --output FILE      Write merged content from YAML files to a new YAML
+                         file. (optional, env: IAC_VALIDATE_OUTPUT)
   -h, --help             Show this message and exit.
 ```
 

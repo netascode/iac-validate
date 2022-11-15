@@ -51,6 +51,7 @@ class VaultTag(yaml.YAMLObject):
 
 class Validator:
     def __init__(self, schema_path: str, rules_path: str):
+        self.data = None
         self.schema = None
         if os.path.exists(schema_path):
             logger.info("Loading schema")
@@ -140,12 +141,13 @@ class Validator:
 
         error = False
         logger.info("Loading yaml files from %s", input_paths)
-        data = load_yaml_files(input_paths)
+        if self.data is None:
+            self.data = load_yaml_files(input_paths)
 
         results = {}
         for rule in self.rules.values():
             logger.info("Verifying rule id %s", rule.id)
-            paths = rule.match(data)
+            paths = rule.match(self.data)
             if len(paths) > 0:
                 results[rule.id] = paths
         if len(results) > 0:
@@ -157,3 +159,9 @@ class Validator:
                 logger.error(msg)
                 self.errors.append(msg)
         return error
+
+    def write_output(self, input_paths: List[str], path: str) -> None:
+        if self.data is None:
+            self.data = load_yaml_files(input_paths)
+        with open(path, "w") as fh:
+            fh.write(yaml.dump(self.data, default_flow_style=False))

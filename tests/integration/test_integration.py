@@ -108,3 +108,19 @@ def test_validate_semantics():
         ],
     )
     assert result.exit_code == 1
+
+
+def test_validate_output(tmpdir):
+    runner = CliRunner()
+    input_path = "tests/integration/fixtures/data/"
+    output_path = os.path.join(tmpdir, "output.yaml")
+    result = runner.invoke(
+        iac_validate.cli.main.main,
+        [
+            "-o",
+            output_path,
+            input_path,
+        ],
+    )
+    assert result.exit_code == 0
+    assert os.path.exists(output_path)
