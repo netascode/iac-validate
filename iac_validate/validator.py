@@ -8,7 +8,7 @@ import logging
 import os
 import subprocess
 import sys
-from typing import Any, List
+from typing import Any, Dict, List, Optional
 
 import yamale
 from yamale.yamale_error import YamaleError
@@ -51,7 +51,7 @@ class VaultTag(yaml.YAMLObject):
 
 class Validator:
     def __init__(self, schema_path: str, rules_path: str):
-        self.data = None
+        self.data: Optional[Dict[str, Any]] = None
         self.schema = None
         if os.path.exists(schema_path):
             logger.info("Loading schema")
