@@ -2,13 +2,45 @@
 
 # Copyright: (c) 2022, Daniel Schmidt <danischm@cisco.com>
 
+import importlib.util
 import logging
 import os
+import subprocess
 from typing import Any, Dict, List
 
-import ruamel.yaml
+from ruamel import yaml
 
 logger = logging.getLogger(__name__)
+
+
+class VaultTag(yaml.YAMLObject):
+    yaml_tag = "!vault"
+
+    def __init__(self, v: str):
+        self.value = v
+
+    def __repr__(self) -> str:
+        spec = importlib.util.find_spec("iac_validate.ansible_vault")
+        if spec:
+            if "ANSIBLE_VAULT_ID" in os.environ:
+                vault_id = os.environ["ANSIBLE_VAULT_ID"] + "@" + str(spec.origin)
+            else:
+                vault_id = str(spec.origin)
+            t = subprocess.check_output(
+                [
+                    "ansible-vault",
+                    "decrypt",
+                    "--vault-id",
+                    vault_id,
+                ],
+                input=self.value.encode(),
+            )
+            return t.decode()
+        return ""
+
+    @classmethod
+    def from_yaml(cls, loader: Any, node: Any) -> str:
+        return str(cls(node.value))
 
 
 def load_yaml_files(paths: List[str]) -> Dict[str, Any]:
@@ -18,8 +50,9 @@ def load_yaml_files(paths: List[str]) -> Dict[str, Any]:
         with open(file_path, "r") as file:
             if ".yaml" in file_path or ".yml" in file_path:
                 data_yaml = file.read()
-                yaml = ruamel.yaml.YAML(typ="safe")
-                dict = yaml.load(data_yaml)
+                y = yaml.YAML(typ="safe")
+                y.register_class(VaultTag)
+                dict = y.load(data_yaml)
                 merge_dict_list(dict, data)
 
     result: Dict[str, Any] = {}
