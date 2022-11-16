@@ -92,3 +92,14 @@ export ANSIBLE_VAULT_PASSWORD=Password123
 ```
 
 `ANSIBLE_VAULT_ID` is optional, and if not defined will be omitted.
+
+## Additional Tags
+
+### Reading Environment Variables
+
+The `!env` YAML tag can be used to read values from environment variables.
+
+```yaml
+root:
+  name: !env VAR_NAME
+```

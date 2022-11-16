@@ -1,6 +1,7 @@
 # 0.1.9 (unreleased)
 
 - Preserve YAML quotes in output
+- Add `!env` tag to read values from environment variables
 
 # 0.1.8
 

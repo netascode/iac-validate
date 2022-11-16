@@ -6,6 +6,7 @@ import os
 
 from click.testing import CliRunner
 import pytest
+from ruamel import yaml
 
 import iac_validate.cli.main
 
@@ -45,6 +46,30 @@ def test_validate_vault():
         ],
     )
     assert result.exit_code == 0
+
+
+def test_validate_env(tmpdir):
+    runner = CliRunner()
+    input_path = "tests/integration/fixtures/data_env/"
+    schema_path = "tests/integration/fixtures/schema/schema.yaml"
+    output_path = os.path.join(tmpdir, "output.yaml")
+    os.environ["ABC"] = "DEF"
+    result = runner.invoke(
+        iac_validate.cli.main.main,
+        [
+            "-s",
+            schema_path,
+            "-o",
+            output_path,
+            input_path,
+        ],
+    )
+    assert result.exit_code == 0
+    with open(output_path, "r") as file:
+        data_yaml = file.read()
+    y = yaml.YAML()
+    data = y.load(data_yaml)
+    assert data["root"]["children"][0]["name"] == "DEF"
 
 
 def test_validate_additional_data():

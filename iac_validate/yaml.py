@@ -43,6 +43,23 @@ class VaultTag(yaml.YAMLObject):
         return str(cls(node.value))
 
 
+class EnvTag(yaml.YAMLObject):
+    yaml_tag = "!env"
+
+    def __init__(self, v: str):
+        self.value = v
+
+    def __repr__(self) -> str:
+        env = os.getenv(self.value)
+        if env is None:
+            return ""
+        return env
+
+    @classmethod
+    def from_yaml(cls, loader: Any, node: Any) -> str:
+        return str(cls(node.value))
+
+
 def load_yaml_files(paths: List[str]) -> Dict[str, Any]:
     """Load all yaml files from a provided directory."""
 
@@ -53,6 +70,7 @@ def load_yaml_files(paths: List[str]) -> Dict[str, Any]:
                 y = yaml.YAML()
                 y.preserve_quotes = True  # type: ignore
                 y.register_class(VaultTag)
+                y.register_class(EnvTag)
                 dict = y.load(data_yaml)
                 merge_dict_list(dict, data)
 
