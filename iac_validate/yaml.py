@@ -50,7 +50,8 @@ def load_yaml_files(paths: List[str]) -> Dict[str, Any]:
         with open(file_path, "r") as file:
             if ".yaml" in file_path or ".yml" in file_path:
                 data_yaml = file.read()
-                y = yaml.YAML(typ="safe")
+                y = yaml.YAML()
+                y.preserve_quotes = True
                 y.register_class(VaultTag)
                 dict = y.load(data_yaml)
                 merge_dict_list(dict, data)

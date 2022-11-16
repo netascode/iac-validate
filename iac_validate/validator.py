@@ -13,7 +13,7 @@ from ruamel import yaml
 import yamale
 from yamale.yamale_error import YamaleError
 
-from .util import load_yaml_files
+from .yaml import load_yaml_files
 
 logger = logging.getLogger(__name__)
 

@@ -1,3 +1,7 @@
+# 0.1.9 (unreleased)
+
+- Preserve YAML quotes in output
+
 # 0.1.8
 
 - Use `ruamel.yaml` package consistently
