@@ -7,11 +7,10 @@ on:
       - main
 
 jobs:
-  static:
-    name: Tests
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    concurrency: testing_environment
+    timeout-minutes: 5
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -19,7 +18,7 @@ jobs:
       - name: Python Setup
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Lint Checks
         run: |
@@ -30,10 +29,40 @@ jobs:
           poetry run black --check iac_validate
           poetry run mypy iac_validate
 
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        python:
+          - '3.7'
+          - '3.8'
+          - '3.9'
+          - '3.10'
+          - '3.11'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Python Setup
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python }}
+
       - name: Test
         run: |
+          pip install poetry
+          poetry install
           poetry run pytest
 
+  notification:
+    name: Notification
+    if: ${{ always() }}
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
       - name: Webex Notification
         if: always()
         uses: qsnyder/action-wxt@master
