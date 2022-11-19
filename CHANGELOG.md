@@ -1,4 +1,4 @@
-# 0.1.9 (unreleased)
+# 0.2.0
 
 - Preserve YAML quotes in output
 - Add `!env` tag to read values from environment variables
