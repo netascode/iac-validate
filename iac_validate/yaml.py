@@ -72,7 +72,7 @@ def load_yaml_files(paths: List[str]) -> Dict[str, Any]:
                 y.register_class(VaultTag)
                 y.register_class(EnvTag)
                 dict = y.load(data_yaml)
-                merge_dict_list(dict, data)
+                merge_dict(dict, data)
 
     result: Dict[str, Any] = {}
     for path in paths:
@@ -89,10 +89,10 @@ def load_yaml_files(paths: List[str]) -> Dict[str, Any]:
 
 
 def merge_list_item(
-    source_item: Any, destination: List[Any], deep_merge: bool = True
+    source_item: Any, destination: List[Any], merge_list_items: bool = True
 ) -> None:
     """Merge item into list."""
-    if isinstance(source_item, dict) and deep_merge:
+    if isinstance(source_item, dict):
         # check if we have an item in destination with matching primitives
         for dest_item in destination:
             match = True
@@ -100,35 +100,36 @@ def merge_list_item(
             for k, v in source_item.items():
                 if isinstance(v, dict) or isinstance(v, list):
                     continue
-                elif k in dest_item and v == dest_item[k]:
+                if k in dest_item and v == dest_item[k]:
                     comparison = True
                     continue
-                else:
-                    comparison = True
-                    match = False
-            if comparison and match:
-                merge_dict_list(source_item, dest_item)
+                if k not in dest_item:
+                    continue
+                comparison = True
+                match = False
+            if comparison and match and merge_list_items:
+                merge_dict(source_item, dest_item)
                 return
-    elif source_item in destination:
+    elif source_item in destination and merge_list_items:
         return
     destination.append(source_item)
 
 
-def merge_dict_list(
-    source: Dict[Any, Any], destination: Dict[Any, Any], deep_merge_list: bool = True
+def merge_dict(
+    source: Dict[Any, Any], destination: Dict[Any, Any], merge_list_items: bool = True
 ) -> Dict[Any, Any]:
     """Merge two nested dict/list structures."""
     for key, value in source.items():
         if isinstance(value, dict):
             # get node or create one
             node = destination.setdefault(key, {})
-            merge_dict_list(value, node)
+            merge_dict(value, node)
         elif isinstance(value, list):
             if key not in destination:
                 destination[key] = value
             if isinstance(destination[key], list):
                 for i in value:
-                    merge_list_item(i, destination[key], deep_merge_list)
+                    merge_list_item(i, destination[key], merge_list_items)
         else:
             destination[key] = value
     return destination
