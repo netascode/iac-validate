@@ -33,10 +33,10 @@ def test_merge_list_item():
     result = ["abc", "def"]
     yaml.merge_list_item(source_item, destination)
     assert destination == result
-    # append matching primitive list items
+    # merge matching primitive list items
     destination = ["abc", "def"]
     source_item = "abc"
-    result = ["abc", "def", "abc"]
+    result = ["abc", "def"]
     yaml.merge_list_item(source_item, destination, False)
     assert destination == result
     # merge matching dict list items
@@ -89,5 +89,11 @@ def test_merge_list_item():
             "map": {"elem1": "value1", "elem2": "value2", "elem3": "value3"},
         }
     ]
+    yaml.merge_list_item(source_item, destination)
+    assert destination == result
+    # not merge matching dict list items with extra dst and src primitive attribute
+    destination = [{"name": "abc", "name2": "def"}]
+    source_item = {"name": "abc", "name3": "ghi"}
+    result = [{"name": "abc", "name2": "def"}, {"name": "abc", "name3": "ghi"}]
     yaml.merge_list_item(source_item, destination)
     assert destination == result

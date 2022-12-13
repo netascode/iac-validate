@@ -92,11 +92,13 @@ def merge_list_item(
     source_item: Any, destination: List[Any], merge_list_items: bool = True
 ) -> None:
     """Merge item into list."""
-    if isinstance(source_item, dict):
+    if isinstance(source_item, dict) and merge_list_items:
         # check if we have an item in destination with matching primitives
         for dest_item in destination:
             match = True
             comparison = False
+            unique_source = False
+            unique_dest = False
             for k, v in source_item.items():
                 if isinstance(v, dict) or isinstance(v, list):
                     continue
@@ -104,13 +106,25 @@ def merge_list_item(
                     comparison = True
                     continue
                 if k not in dest_item:
+                    unique_source = True
                     continue
                 comparison = True
                 match = False
-            if comparison and match and merge_list_items:
-                merge_dict(source_item, dest_item)
+            for k, v in dest_item.items():
+                if isinstance(v, dict) or isinstance(v, list):
+                    continue
+                if k in source_item and v == source_item[k]:
+                    comparison = True
+                    continue
+                if k not in source_item:
+                    unique_dest = True
+                    continue
+                comparison = True
+                match = False
+            if comparison and match and not (unique_source and unique_dest):
+                merge_dict(source_item, dest_item, merge_list_items)
                 return
-    elif source_item in destination and merge_list_items:
+    elif source_item in destination:
         return
     destination.append(source_item)
 
@@ -123,7 +137,7 @@ def merge_dict(
         if isinstance(value, dict):
             # get node or create one
             node = destination.setdefault(key, {})
-            merge_dict(value, node)
+            merge_dict(value, node, merge_list_items)
         elif isinstance(value, list):
             if key not in destination:
                 destination[key] = value

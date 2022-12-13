@@ -1,3 +1,7 @@
+# 0.2.1 (unreleased)
+
+- Do not merge YAML dictionary list items, where each list item has unique attributes with primitive values
+
 # 0.2.0
 
 - Preserve YAML quotes in output
