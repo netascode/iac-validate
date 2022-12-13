@@ -1,4 +1,4 @@
-# 0.2.1 (unreleased)
+# 0.2.1
 
 - Do not merge YAML dictionary list items, where each list item has unique attributes with primitive values
 
