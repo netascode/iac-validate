@@ -33,6 +33,12 @@ output = click.option(
     required=False,
 )
 
+non_strict = click.option(
+    "--non-strict",
+    is_flag=True,
+    help="Accept unexpected elements in YAML files.",
+)
+
 paths = click.argument(
     "paths",
     type=click.Path(exists=True, dir_okay=True, file_okay=True),

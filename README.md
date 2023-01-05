@@ -20,6 +20,7 @@ Options:
                          '.rules/', env: IAC_VALIDATE_RULES)
   -o, --output FILE      Write merged content from YAML files to a new YAML
                          file. (optional, env: IAC_VALIDATE_OUTPUT)
+  --non-strict           Accept unexpected elements in YAML files.
   -h, --help             Show this message and exit.
 ```
 

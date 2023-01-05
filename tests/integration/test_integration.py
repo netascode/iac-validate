@@ -31,6 +31,25 @@ def test_validate():
     assert result.exit_code == 0
 
 
+def test_validate_non_strict():
+    runner = CliRunner()
+    input_path = "tests/integration/fixtures/data_non_strict/"
+    schema_path = "tests/integration/fixtures/schema/schema.yaml"
+    rules_path = "tests/integration/fixtures/rules/"
+    result = runner.invoke(
+        iac_validate.cli.main.main,
+        [
+            "-s",
+            schema_path,
+            "-r",
+            rules_path,
+            "--non-strict",
+            input_path,
+        ],
+    )
+    assert result.exit_code == 0
+
+
 def test_validate_vault():
     runner = CliRunner()
     input_path = "tests/integration/fixtures/data_vault/"

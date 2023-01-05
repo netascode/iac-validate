@@ -42,7 +42,7 @@ class Validator:
                             spec.loader.exec_module(mod)
                             self.rules[mod.Rule.id] = mod.Rule
 
-    def _validate_syntax_file(self, file_path: str) -> None:
+    def _validate_syntax_file(self, file_path: str, strict: bool = True) -> None:
         """Run syntactic validation for a single file"""
         filename = os.path.basename(file_path)
         if os.path.isfile(file_path) and (".yaml" in filename or ".yml" in filename):
@@ -72,7 +72,7 @@ class Validator:
             if self.schema is None or data is None:
                 return
             try:
-                yamale.validate(self.schema, [(data, file_path)], strict=True)
+                yamale.validate(self.schema, [(data, file_path)], strict=strict)
             except YamaleError as e:
                 for result in e.results:
                     for err in result.errors:
@@ -80,16 +80,16 @@ class Validator:
                         logger.error(msg)
                         self.errors.append(msg)
 
-    def validate_syntax(self, input_paths: List[str]) -> bool:
+    def validate_syntax(self, input_paths: List[str], strict: bool = True) -> bool:
         """Run syntactic validation"""
         for input_path in input_paths:
             if os.path.isfile(input_path):
-                self._validate_syntax_file(input_path)
+                self._validate_syntax_file(input_path, strict)
             else:
                 for dir, subdir, files in os.walk(input_path):
                     for filename in files:
                         file_path = os.path.join(dir, filename)
-                        self._validate_syntax_file(file_path)
+                        self._validate_syntax_file(file_path, strict)
         if self.errors:
             return True
         return False
