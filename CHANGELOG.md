@@ -1,4 +1,4 @@
-# 0.2.2 (unreleased)
+# 0.2.2
 
 - Add `--non-strict` CLI argument to accept unexpected elements in YAML files
 
