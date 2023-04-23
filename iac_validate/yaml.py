@@ -139,7 +139,10 @@ def merge_dict(
         if isinstance(value, dict):
             # get node or create one
             node = destination.setdefault(key, {})
-            merge_dict(value, node, merge_list_items)
+            if node is None:
+                destination[key] = value
+            else:
+                merge_dict(value, node, merge_list_items)
         elif isinstance(value, list):
             if key not in destination:
                 destination[key] = value
