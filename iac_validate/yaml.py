@@ -133,6 +133,8 @@ def merge_dict(
     source: Dict[Any, Any], destination: Dict[Any, Any], merge_list_items: bool = True
 ) -> Dict[Any, Any]:
     """Merge two nested dict/list structures."""
+    if not source:
+        return destination
     for key, value in source.items():
         if isinstance(value, dict):
             # get node or create one

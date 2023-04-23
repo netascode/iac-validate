@@ -91,6 +91,21 @@ def test_validate_env(tmpdir):
     assert data["root"]["children"][0]["name"] == "DEF"
 
 
+def test_validate_empty_data():
+    runner = CliRunner()
+    input_path = "tests/integration/fixtures/data_empty/"
+    schema_path = "tests/integration/fixtures/schema/schema.yaml"
+    result = runner.invoke(
+        iac_validate.cli.main.main,
+        [
+            "-s",
+            schema_path,
+            input_path,
+        ],
+    )
+    assert result.exit_code == 0
+
+
 def test_validate_additional_data():
     runner = CliRunner()
     input_path = "tests/integration/fixtures/data/"
