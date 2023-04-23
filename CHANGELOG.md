@@ -1,3 +1,8 @@
+# 0.2.3 (unreleased)
+
+- Handle file errors gracefully
+- Allow empty YAML files
+
 # 0.2.2
 
 - Add `--non-strict` CLI argument to accept unexpected elements in YAML files
