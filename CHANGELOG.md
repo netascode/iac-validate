@@ -1,4 +1,4 @@
-# 0.2.3 (unreleased)
+# 0.2.3
 
 - Handle file errors gracefully
 - Allow empty YAML files
