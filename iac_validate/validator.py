@@ -31,16 +31,19 @@ class Validator:
             logger.info("Loading rules")
             for filename in os.listdir(rules_path):
                 if filename.endswith(".py"):
-                    file_path = os.path.join(rules_path, filename)
-                    spec = importlib.util.spec_from_file_location(
-                        "iac_validate.rules", file_path
-                    )
-                    if spec is not None:
-                        mod = importlib.util.module_from_spec(spec)
-                        sys.modules["iac_validate.rules"] = mod
-                        if spec.loader is not None:
-                            spec.loader.exec_module(mod)
-                            self.rules[mod.Rule.id] = mod.Rule
+                    try:
+                        file_path = os.path.join(rules_path, filename)
+                        spec = importlib.util.spec_from_file_location(
+                            "iac_validate.rules", file_path
+                        )
+                        if spec is not None:
+                            mod = importlib.util.module_from_spec(spec)
+                            sys.modules["iac_validate.rules"] = mod
+                            if spec.loader is not None:
+                                spec.loader.exec_module(mod)
+                                self.rules[mod.Rule.id] = mod.Rule
+                    except:  # noqa: E722
+                        logger.error("Failed loading rule: {}".format(filename))
 
     def _validate_syntax_file(self, file_path: str, strict: bool = True) -> None:
         """Run syntactic validation for a single file"""
@@ -123,7 +126,10 @@ class Validator:
     def write_output(self, input_paths: List[str], path: str) -> None:
         if self.data is None:
             self.data = load_yaml_files(input_paths)
-        with open(path, "w") as fh:
-            y = yaml.YAML()
-            y.default_flow_style = False
-            y.dump(self.data, fh)
+        try:
+            with open(path, "w") as fh:
+                y = yaml.YAML()
+                y.default_flow_style = False
+                y.dump(self.data, fh)
+        except:  # noqa: E722
+            logger.error("Cannot write file: {}".format(path))
