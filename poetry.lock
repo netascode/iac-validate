@@ -2,14 +2,14 @@
 
 [[package]]
 name = "ansible-core"
-version = "2.13.9"
+version = "2.13.10"
 description = "Radically simple IT automation"
 category = "dev"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "ansible-core-2.13.9.tar.gz", hash = "sha256:9c319eca0a9c53cde6f174812ddd7114edb1e5d0eb5e1df47bd0d8fefedac76c"},
-    {file = "ansible_core-2.13.9-py3-none-any.whl", hash = "sha256:8fcd6b915857e7a3167926bcfe5743f9b4e4abf3566d6d53028c1c1a7ffa3aa8"},
+    {file = "ansible-core-2.13.10.tar.gz", hash = "sha256:d4b40a4aaf860def6c2c9e8ad5201f8683e3e7d7d8e21463c6d59ea4f8b12df7"},
+    {file = "ansible_core-2.13.10-py3-none-any.whl", hash = "sha256:dcd72152b1ce56387712d8727d75c65e61a8f6265b19105c9d0649f0777ccb67"},
 ]
 
 [package.dependencies]
