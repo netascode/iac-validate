@@ -1,3 +1,7 @@
+# 0.2.4 (unreleased)
+
+- Dependency updates
+
 # 0.2.3
 
 - Handle file errors gracefully
