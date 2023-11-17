@@ -16,13 +16,13 @@ iac-validate = "iac_validate.cli.main:main"
 [tool.poetry.dependencies]
 click = "^8.0.4"
 errorhandler = "^2.0.1"
-importlib-metadata = {version = "^2.0.0", python = "<3.8"}
-python = "^3.7"
+importlib-metadata = "^2.0.0"
+python = "^3.8"
 ruamel-yaml = ">0.16.10"
 yamale = "^4.0.3"
 
 [tool.poetry.group.dev.dependencies]
-ansible-core = {version = "^2.13.2", python = ">=3.8"}
+ansible-core = "^2.13.2"
 black = "^22.10.0"
 flake8 = "^5.0.4"
 isort = "^5.10.1"
