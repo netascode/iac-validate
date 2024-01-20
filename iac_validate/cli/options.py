@@ -4,12 +4,15 @@
 
 import click
 
+DEFAULT_SCHEMA = ".schema.yaml"
+DEFAULT_RULES = ".rules/"
+
 rules = click.option(
     "-r",
     "--rules",
     type=click.Path(exists=False, dir_okay=True, file_okay=False),
     envvar="IAC_VALIDATE_RULES",
-    default=".rules/",
+    default=DEFAULT_RULES,
     help="Path to semantic rules. (optional, default: '.rules/', env: IAC_VALIDATE_RULES)",
     required=False,
 )
@@ -19,7 +22,7 @@ schema = click.option(
     "--schema",
     type=click.Path(exists=False, dir_okay=False, file_okay=True),
     envvar="IAC_VALIDATE_SCHEMA",
-    default=".schema.yaml",
+    default=DEFAULT_SCHEMA,
     help="Path to schema file. (optional, default: '.schema.yaml', env: IAC_VALIDATE_SCHEMA)",
     required=False,
 )

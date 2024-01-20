@@ -13,6 +13,7 @@ from ruamel import yaml
 import yamale
 from yamale.yamale_error import YamaleError
 
+from .cli.options import DEFAULT_RULES, DEFAULT_SCHEMA
 from .yaml import load_yaml_files
 
 logger = logging.getLogger(__name__)
@@ -25,6 +26,11 @@ class Validator:
         if os.path.exists(schema_path):
             logger.info("Loading schema")
             self.schema = yamale.make_schema(schema_path, parser="ruamel")
+        elif schema_path == DEFAULT_SCHEMA:
+            logger.info("No schema file found")
+        else:
+            logger.error("Schema file not found: {}".format(schema_path))
+            sys.exit(1)
         self.errors: List[str] = []
         self.rules = {}
         if os.path.exists(rules_path):
@@ -44,6 +50,11 @@ class Validator:
                                 self.rules[mod.Rule.id] = mod.Rule
                     except:  # noqa: E722
                         logger.error("Failed loading rule: {}".format(filename))
+        elif rules_path == DEFAULT_RULES:
+            logger.info("No rules found")
+        else:
+            logger.error("Rules directory not found: {}".format(rules_path))
+            sys.exit(1)
 
     def _validate_syntax_file(self, file_path: str, strict: bool = True) -> None:
         """Run syntactic validation for a single file"""

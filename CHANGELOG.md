@@ -1,3 +1,7 @@
+# 0.2.5 (unreleased)
+
+- Check non-default schema and rules paths for existence
+
 # 0.2.4
 
 - Dependency updates
