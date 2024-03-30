@@ -58,7 +58,7 @@ jobs:
 
   notification:
     name: Notification
-    if: ${{ always() }}
+    if: always() && github.event_name != 'pull_request'
     needs: [lint, test]
     runs-on: ubuntu-latest
     timeout-minutes: 5
