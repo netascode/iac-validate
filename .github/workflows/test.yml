@@ -18,15 +18,15 @@ jobs:
       - name: Python Setup
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
-      - name: Lint Checks
+      - name: Pre-commit Checks
+        uses: pre-commit/action@v3.0.1
+
+      - name: Type Checks
         run: |
           pip install poetry
           poetry install
-          poetry run flake8
-          poetry run isort --check iac_validate
-          poetry run black --check iac_validate
           poetry run mypy iac_validate
 
   test:
@@ -36,11 +36,11 @@ jobs:
     strategy:
       matrix:
         python:
-          - '3.8'
-          - '3.9'
-          - '3.10'
-          - '3.11'
-          - '3.12'
+          - "3.8"
+          - "3.9"
+          - "3.10"
+          - "3.11"
+          - "3.12"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -73,7 +73,7 @@ jobs:
             echo "jobSuccess=fail" >> $GITHUB_ENV
           fi
         id: print_status
-        
+
       - name: Webex Notification
         if: always()
         uses: qsnyder/action-wxt@master
