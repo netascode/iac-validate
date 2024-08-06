@@ -16,7 +16,6 @@ iac-validate = "iac_validate.cli.main:main"
 [tool.poetry.dependencies]
 click = "^8.0.4"
 errorhandler = "^2.0.1"
-importlib-metadata = "^2.0.0"
 python = "^3.8"
 ruamel-yaml = ">0.16.10"
 yamale = "^4.0.3"
@@ -29,8 +28,6 @@ pytest = "^8.2.0"
 pytest-cov = "^5.0.0"
 pytest-mock = "^3.14.0"
 ruff = "^0.5.6"
-toml = "^0.10.2"
-types-pyyaml = "^6.0.12.2"
 
 [tool.coverage.run]
 source = ["iac_validate"]
