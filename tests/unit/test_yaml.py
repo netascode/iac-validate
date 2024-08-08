@@ -18,6 +18,20 @@ def test_merge_dict():
     result = {"root": {"child1": "abc", "child2": "def"}}
     yaml.merge_dict(source, destination)
     assert destination == result
+    # make sure that the code doesn't hang when merging lists of lists
+    source = {
+        "switch_link_aggregations": [
+            {
+                "switch_ports": [
+                    {"port_id": "7", "serial": "asd"},
+                    {"port_id": "8", "serial": "qwe"},
+                ]
+            }
+        ]
+    }
+    destination = {}
+    yaml.merge_dict(source, destination)
+    assert destination == source
 
 
 def test_merge_list_item():
