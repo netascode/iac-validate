@@ -1,4 +1,4 @@
-# 0.2.6 (unreleased)
+# 0.2.6
 
 - Fix issue with directly nested lists in YAML files
 
