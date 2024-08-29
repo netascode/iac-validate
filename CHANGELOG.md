@@ -1,3 +1,7 @@
+# 0.2.6 (unreleased)
+
+- Fix issue with directly nested lists in YAML files
+
 # 0.2.5
 
 - Check non-default schema and rules paths for existence
