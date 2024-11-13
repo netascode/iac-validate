@@ -5,6 +5,7 @@
 import importlib
 import importlib.util
 import logging
+import warnings
 import os
 import sys
 from typing import Any, Dict, List, Optional
@@ -25,7 +26,13 @@ class Validator:
         self.schema = None
         if os.path.exists(schema_path):
             logger.info("Loading schema")
-            self.schema = yamale.make_schema(schema_path, parser="ruamel")
+            with warnings.catch_warnings():
+                warnings.filterwarnings(
+                    action="ignore",
+                    category=SyntaxWarning,
+                    message="invalid escape sequence",
+                )
+                self.schema = yamale.make_schema(schema_path, parser="ruamel")
         elif schema_path == DEFAULT_SCHEMA:
             logger.info("No schema file found")
         else:
