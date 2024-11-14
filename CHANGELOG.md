@@ -1,3 +1,7 @@
+# 0.2.7 (unreleased)
+
+- Suppress Yamale syntax warnings when running Python 3.12+
+
 # 0.2.6
 
 - Fix issue with directly nested lists in YAML files
