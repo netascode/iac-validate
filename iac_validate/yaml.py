@@ -148,7 +148,8 @@ def merge_dict(
                 destination[key] = value[:]
             if isinstance(destination[key], list):
                 for i in value:
-                    merge_list_item(i, destination[key], merge_list_items)
+                    if i not in destination[key]:
+                        merge_list_item(i, destination[key], merge_list_items)
         else:
             destination[key] = value
     return destination
