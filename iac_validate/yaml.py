@@ -145,7 +145,7 @@ def merge_dict(
                 merge_dict(value, node, merge_list_items)
         elif isinstance(value, list):
             if key not in destination:
-                destination[key] = []
+                destination[key] = value[:]
             if isinstance(destination[key], list):
                 for i in value:
                     merge_list_item(i, destination[key], merge_list_items)
