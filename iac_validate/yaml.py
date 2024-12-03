@@ -97,8 +97,6 @@ def merge_list_item(
         for dest_item in destination:
             match = True
             comparison = False
-            unique_source = False
-            unique_dest = False
             for k, v in source_item.items():
                 if isinstance(v, dict) or isinstance(v, list):
                     continue
@@ -106,7 +104,6 @@ def merge_list_item(
                     comparison = True
                     continue
                 if k not in dest_item:
-                    unique_source = True
                     continue
                 comparison = True
                 match = False
@@ -117,11 +114,10 @@ def merge_list_item(
                     comparison = True
                     continue
                 if k not in source_item:
-                    unique_dest = True
                     continue
                 comparison = True
                 match = False
-            if comparison and match and not (unique_source and unique_dest):
+            if comparison and match:
                 merge_dict(source_item, dest_item, merge_list_items)
                 return
     elif source_item in destination:
