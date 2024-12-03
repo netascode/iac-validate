@@ -32,6 +32,11 @@ def test_merge_dict():
     destination = {}
     yaml.merge_dict(source, destination)
     assert destination == source
+    # make sure that merge_dict will not remove duplicate entries
+    source = {"root": {"duplicates": [{"name": "abc"}, {"name": "abc"}]}}
+    destination = {}
+    yaml.merge_dict(source, destination)
+    assert destination == source
 
 
 def test_merge_list_item():
