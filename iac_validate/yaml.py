@@ -88,40 +88,36 @@ def load_yaml_files(paths: List[str]) -> Dict[str, Any]:
     return result
 
 
+def compare_dict(source: Dict[Any, Any], destination: Dict[Any, Any]) -> int:
+    """Compare two nested dict structures.
+
+    :returns: '0' if the two dicts are not equal, '1' if there are no matching keys, '2' if the dicts are equal
+    """
+    if not source:
+        return destination == source
+    comparison = False
+    for key, value in source.items():
+        if key not in destination or isinstance(value, list):
+            continue
+        if isinstance(value, dict):
+            if compare_dict(value, destination[key]) == 0:
+                return 0
+        elif value != destination[key]:
+            return 0
+        comparison = True
+    if comparison:
+        return 2
+    return 1
+
+
 def merge_list_item(
     source_item: Any, destination: List[Any], merge_list_items: bool = True
 ) -> None:
     """Merge item into list."""
     if isinstance(source_item, dict) and merge_list_items:
-        # check if we have an item in destination with matching primitives
+        # check if we have a matching item in destination
         for dest_item in destination:
-            match = True
-            comparison = False
-            unique_source = False
-            unique_dest = False
-            for k, v in source_item.items():
-                if isinstance(v, dict) or isinstance(v, list):
-                    continue
-                if k in dest_item and v == dest_item[k]:
-                    comparison = True
-                    continue
-                if k not in dest_item:
-                    unique_source = True
-                    continue
-                comparison = True
-                match = False
-            for k, v in dest_item.items():
-                if isinstance(v, dict) or isinstance(v, list):
-                    continue
-                if k in source_item and v == source_item[k]:
-                    comparison = True
-                    continue
-                if k not in source_item:
-                    unique_dest = True
-                    continue
-                comparison = True
-                match = False
-            if comparison and match and not (unique_source and unique_dest):
+            if compare_dict(source_item, dest_item) == 2:
                 merge_dict(source_item, dest_item, merge_list_items)
                 return
     elif source_item in destination:
