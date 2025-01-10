@@ -44,6 +44,20 @@ def test_merge_dict():
     destination = {}
     yaml.merge_dict(source, destination)
     assert destination == source
+    # deduplicate list items in source
+    source = {"list1": [{"name": "1", "list2": [{"name": "1"}, {"name": "1"}]}]}
+    destination = {}
+    result = {"list1": [{"name": "1", "list2": [{"name": "1"}]}]}
+    yaml.merge_dict(source, destination)
+    print(destination)
+    assert destination == result
+    # deduplicate list items in destination
+    destination = {"list1": [{"name": "1", "list2": [{"name": "1"}, {"name": "1"}]}]}
+    source = {}
+    result = {"list1": [{"name": "1", "list2": [{"name": "1"}]}]}
+    yaml.merge_dict(source, destination)
+    print(destination)
+    assert destination == result
 
 
 def test_merge_list_item():

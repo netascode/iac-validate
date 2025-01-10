@@ -114,12 +114,16 @@ def merge_list_item(
     source_item: Any, destination: List[Any], merge_list_items: bool = True
 ) -> None:
     """Merge item into list."""
-    if isinstance(source_item, dict) and merge_list_items:
-        # check if we have a matching item in destination
-        for dest_item in destination:
-            if compare_dict(source_item, dest_item) == 2:
-                merge_dict(source_item, dest_item, merge_list_items)
-                return
+    if isinstance(source_item, dict):
+        if merge_list_items:
+            # check if we have a matching item in destination
+            for dest_item in destination:
+                if compare_dict(source_item, dest_item) == 2:
+                    merge_dict(source_item, dest_item, merge_list_items)
+                    return
+            destination.append(merge_dict(source_item, {}, merge_list_items))
+        else:
+            destination.append(source_item)
     elif source_item in destination:
         return
     destination.append(source_item)
@@ -138,13 +142,30 @@ def merge_dict(
             if node is None:
                 destination[key] = value
             else:
-                merge_dict(value, node, merge_list_items)
+                merge_dict(value, node)
         elif isinstance(value, list):
-            if key not in destination:
-                destination[key] = []
-            if isinstance(destination[key], list):
-                for i in value:
-                    merge_list_item(i, destination[key], merge_list_items)
+            node = destination.setdefault(key, [])
+            if node is None:
+                destination[key] = value
+            else:
+                destination[key].extend(value)
+            # new_list = []
+            # for i in destination.get(key, []):
+            #     merge_list_item(i, new_list, merge_list_items)
+            # for i in value:
+            #     merge_list_item(i, new_list, merge_list_items)
+            # destination[key] = new_list
+            # if key not in destination:
+            #     destination[key] = []
+            # if isinstance(destination[key], list):
+            #     for i in value:
+            #         merge_list_item(i, destination[key], merge_list_items)
+
+            # deduplicate list
+            new_list = []
+            for i in value:
+                merge_list_item(i, new_list, merge_list_items)
+            destination[key] = new_list
         else:
             destination[key] = value
     return destination
