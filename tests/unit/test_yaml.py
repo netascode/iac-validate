@@ -32,6 +32,11 @@ def test_merge_dict():
     destination = {}
     yaml.merge_dict(source, destination)
     assert destination == source
+    # make sure that merge_dict will not remove duplicate entries
+    source = {"root": {"duplicates": [{"name": "abc"}, {"name": "abc"}]}}
+    destination = {}
+    yaml.merge_dict(source, destination)
+    assert destination == source
 
 
 def test_merge_list_item():
@@ -105,9 +110,9 @@ def test_merge_list_item():
     ]
     yaml.merge_list_item(source_item, destination)
     assert destination == result
-    # not merge matching dict list items with extra dst and src primitive attribute
+    # merge matching dict list items with extra dst and src primitive attribute
     destination = [{"name": "abc", "name2": "def"}]
     source_item = {"name": "abc", "name3": "ghi"}
-    result = [{"name": "abc", "name2": "def"}, {"name": "abc", "name3": "ghi"}]
+    result = [{"name": "abc", "name2": "def", "name3": "ghi"}]
     yaml.merge_list_item(source_item, destination)
     assert destination == result
