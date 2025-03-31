@@ -1,10 +1,13 @@
+from typing import Any
+
+
 class Rule:
     id = "101"
     description = "Verify child naming restrictions"
     severity = "HIGH"
 
     @classmethod
-    def match(cls, data):
+    def match(cls, data: dict[Any, Any]) -> list[str]:
         results = []
         try:
             for child in data["root"]["children"]:

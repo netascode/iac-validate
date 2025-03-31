@@ -2,14 +2,16 @@ import pytest
 
 from iac_validate import yaml
 
+from typing import Any
+
 pytestmark = pytest.mark.unit
 
 
-def test_merge_dict():
+def test_merge_dict() -> None:
     # merge dicts
-    destination = {"e1": "abc"}
-    source = {"e2": "def"}
-    result = {"e1": "abc", "e2": "def"}
+    destination: dict[Any, Any] = {"e1": "abc"}
+    source: dict[Any, Any] = {"e2": "def"}
+    result: dict[Any, Any] = {"e1": "abc", "e2": "def"}
     yaml.merge_dict(source, destination)
     assert destination == result
     # merge nested dicts
@@ -34,11 +36,11 @@ def test_merge_dict():
     assert destination == source
 
 
-def test_merge_list_item():
+def test_merge_list_item() -> None:
     # merge primitive list items
-    destination = ["abc", "def"]
-    source_item = "ghi"
-    result = ["abc", "def", "ghi"]
+    destination: list[Any] = ["abc", "def"]
+    source_item: Any = "ghi"
+    result: list[Any] = ["abc", "def", "ghi"]
     yaml.merge_list_item(source_item, destination)
     assert destination == result
     # merge matching primitive list items

@@ -4,14 +4,17 @@
 
 import logging
 import sys
-from typing import List
+from enum import Enum
 
-import click
+import typer
+from typing_extensions import Annotated
+from pathlib import Path
 import errorhandler
 
 import iac_validate.validator
+from .defaults import DEFAULT_SCHEMA, DEFAULT_RULES
 
-from . import options
+app = typer.Typer(add_completion=False)
 
 logger = logging.getLogger(__name__)
 
@@ -37,29 +40,111 @@ def configure_logging(level: str) -> None:
     error_handler.reset()
 
 
-@click.command(context_settings=dict(help_option_names=["-h", "--help"]))
-@click.version_option(iac_validate.__version__)
-@click.option(
-    "-v",
-    "--verbosity",
-    metavar="LVL",
-    is_eager=True,
-    type=click.Choice(["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"]),
-    help="Either CRITICAL, ERROR, WARNING, INFO or DEBUG",
-    default="WARNING",
-)
-@options.paths
-@options.schema
-@options.rules
-@options.output
-@options.non_strict
+class VerbosityLevel(str, Enum):
+    debug = "DEBUG"
+    info = "INFO"
+    warning = "WARNING"
+    error = "ERROR"
+    critical = "CRITICAL"
+
+
+def version_callback(value: bool) -> None:
+    if value:
+        print(f"iac-validate, version {iac_validate.__version__}")
+        raise typer.Exit()
+
+
+Paths = Annotated[
+    list[Path],
+    typer.Argument(
+        help="List of paths pointing to YAML files or directories.",
+        exists=True,
+        dir_okay=True,
+        file_okay=True,
+    ),
+]
+
+Verbosity = Annotated[
+    VerbosityLevel,
+    typer.Option(
+        "-v",
+        "--verbosity",
+        help="Verbosity level.",
+        envvar="IAC_VALIDATE_VERBOSITY",
+        is_eager=True,
+    ),
+]
+
+Schema = Annotated[
+    Path,
+    typer.Option(
+        "-s",
+        "--schema",
+        exists=False,
+        dir_okay=False,
+        file_okay=True,
+        help="Path to schema file.",
+        envvar="IAC_VALIDATE_SCHEMA",
+    ),
+]
+
+
+Rules = Annotated[
+    Path,
+    typer.Option(
+        "-r",
+        "--rules",
+        exists=False,
+        dir_okay=True,
+        file_okay=False,
+        help="Path to directory with semantic validation rules.",
+        envvar="IAC_VALIDATE_RULES",
+    ),
+]
+
+Output = Annotated[
+    Path | None,
+    typer.Option(
+        "-o",
+        "--output",
+        exists=False,
+        dir_okay=False,
+        file_okay=True,
+        help="Write merged content from YAML files to a new YAML file.",
+        envvar="IAC_VALIDATE_OUTPUT",
+    ),
+]
+
+NonStrict = Annotated[
+    bool,
+    typer.Option(
+        "--non-strict",
+        help="Accept unexpected elements in YAML files.",
+        envvar="IAC_VALIDATE_NON_STRICT",
+    ),
+]
+
+
+Version = Annotated[
+    bool,
+    typer.Option(
+        "--version",
+        callback=version_callback,
+        help="Display version number.",
+        is_eager=True,
+    ),
+]
+
+
+@app.command()
 def main(
-    verbosity: str,
-    paths: List[str],
-    schema: str,
-    rules: str,
-    output: str,
-    non_strict: bool,
+    paths: Paths,
+    verbosity: Verbosity = VerbosityLevel.warning,
+    schema: Schema = DEFAULT_SCHEMA,
+    rules: Rules = DEFAULT_RULES,
+    output: Output = None,
+    non_strict: NonStrict = False,
+    version: Version = False,
 ) -> None:
     """A CLI tool to perform syntactic and semantic validation of YAML files."""
     configure_logging(verbosity)
@@ -76,6 +161,6 @@ def main(
 
 def exit() -> None:
     if error_handler.fired:
-        sys.exit(1)
+        raise typer.Exit(1)
     else:
-        sys.exit(0)
+        raise typer.Exit(0)

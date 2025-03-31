@@ -1,3 +1,7 @@
+# 0.3.0 (unreleased)
+
+- Modernize CLI interface using [typer](https://github.com/fastapi/typer)
+
 # 0.2.7
 
 - Suppress Yamale syntax warnings when running Python 3.12+
