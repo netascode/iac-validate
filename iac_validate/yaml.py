@@ -138,7 +138,7 @@ def deduplicate_list_items(data: Dict[Any, Any]) -> Dict[Any, Any]:
         if isinstance(value, dict):
             deduplicate_list_items(value)
         elif isinstance(value, list):
-            deduplicated_list = []
+            deduplicated_list: List[Any] = []
             for i in value:
                 merge_list_item(i, deduplicated_list)
             for i in deduplicated_list:
