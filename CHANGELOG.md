@@ -1,3 +1,7 @@
+# 0.2.8 (unreleased)
+
+- BREAKING CHANGE: Update YAML merge logic to merge list items with matching attributes and primitive values, even if both have additional attributes the other does not have
+
 # 0.2.7
 
 - Suppress Yamale syntax warnings when running Python 3.12+
