@@ -1,0 +1,8 @@
+---
+root:
+  attr2: value2
+  primitive_list:
+    - item1
+  dict_list:
+    - name: abc
+      extra2: ghi

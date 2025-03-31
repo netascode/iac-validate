@@ -2,6 +2,7 @@
 
 # Copyright: (c) 2022, Daniel Schmidt <danischm@cisco.com>
 
+import filecmp
 import os
 
 from click.testing import CliRunner
@@ -183,3 +184,22 @@ def test_validate_output(tmpdir):
     )
     assert result.exit_code == 0
     assert os.path.exists(output_path)
+
+
+def test_merge(tmpdir):
+    runner = CliRunner()
+    input_path_1 = "tests/integration/fixtures/data_merge/file1.yaml"
+    input_path_2 = "tests/integration/fixtures/data_merge/file2.yaml"
+    output_path = os.path.join(tmpdir, "output.yaml")
+    result_path = "tests/integration/fixtures/data_merge/result.yaml"
+    result = runner.invoke(
+        iac_validate.cli.main.main,
+        [
+            "-o",
+            output_path,
+            input_path_1,
+            input_path_2,
+        ],
+    )
+    assert result.exit_code == 0
+    assert filecmp.cmp(output_path, result_path, shallow=False)
