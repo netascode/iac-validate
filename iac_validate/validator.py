@@ -45,9 +45,9 @@ class Validator:
         if os.path.exists(rules_path):
             logger.info("Loading rules")
             for filename in os.listdir(rules_path):
-                if filename.endswith(".py"):
+                if Path(filename).suffix == ".py":
                     try:
-                        file_path = os.path.join(rules_path, filename)
+                        file_path = Path(rules_path, filename)
                         spec = importlib.util.spec_from_file_location(
                             "iac_validate.rules", file_path
                         )
@@ -67,9 +67,8 @@ class Validator:
 
     def _validate_syntax_file(self, file_path: Path, strict: bool = True) -> None:
         """Run syntactic validation for a single file"""
-        filename = os.path.basename(file_path)
-        if os.path.isfile(file_path) and (".yaml" in filename or ".yml" in filename):
-            logger.info("Validate file: %s", filename)
+        if os.path.isfile(file_path) and file_path.suffix in [".yaml", ".yml"]:
+            logger.info("Validate file: %s", file_path)
 
             # YAML syntax validation
             data = None
@@ -111,7 +110,7 @@ class Validator:
             else:
                 for dir, subdir, files in os.walk(input_path):
                     for filename in files:
-                        file_path = Path(os.path.join(dir, filename))
+                        file_path = Path(dir, filename)
                         self._validate_syntax_file(file_path, strict)
         if self.errors:
             return True

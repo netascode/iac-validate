@@ -83,7 +83,7 @@ def load_yaml_files(paths: list[Path]) -> dict[str, Any]:
             for dir, subdir, files in os.walk(path):
                 for filename in files:
                     try:
-                        _load_file(Path(dir + os.path.sep + filename), result)
+                        _load_file(Path(dir, filename), result)
                     except:  # noqa: E722
                         logger.warning("Could not load file: {}".format(filename))
     return result
