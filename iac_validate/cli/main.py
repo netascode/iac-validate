@@ -64,6 +64,7 @@ Paths = Annotated[
     ),
 ]
 
+
 Verbosity = Annotated[
     VerbosityLevel,
     typer.Option(
@@ -74,6 +75,7 @@ Verbosity = Annotated[
         is_eager=True,
     ),
 ]
+
 
 Schema = Annotated[
     Path,
@@ -102,6 +104,7 @@ Rules = Annotated[
     ),
 ]
 
+
 Output = Annotated[
     Path | None,
     typer.Option(
@@ -114,6 +117,7 @@ Output = Annotated[
         envvar="IAC_VALIDATE_OUTPUT",
     ),
 ]
+
 
 NonStrict = Annotated[
     bool,
