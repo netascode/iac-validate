@@ -8,21 +8,23 @@ import logging
 import warnings
 import os
 import sys
-from typing import Any, Dict, List, Optional
+from typing import Any
+from pathlib import Path
 
+import typer
 from ruamel import yaml
 import yamale
 from yamale.yamale_error import YamaleError
 
-from .cli.options import DEFAULT_RULES, DEFAULT_SCHEMA
+from .cli.defaults import DEFAULT_SCHEMA, DEFAULT_RULES
 from .yaml import load_yaml_files
 
 logger = logging.getLogger(__name__)
 
 
 class Validator:
-    def __init__(self, schema_path: str, rules_path: str):
-        self.data: Optional[Dict[str, Any]] = None
+    def __init__(self, schema_path: Path, rules_path: Path):
+        self.data: dict[str, Any] | None = None
         self.schema = None
         if os.path.exists(schema_path):
             logger.info("Loading schema")
@@ -37,15 +39,15 @@ class Validator:
             logger.info("No schema file found")
         else:
             logger.error("Schema file not found: {}".format(schema_path))
-            sys.exit(1)
-        self.errors: List[str] = []
+            raise typer.Exit(1)
+        self.errors: list[str] = []
         self.rules = {}
         if os.path.exists(rules_path):
             logger.info("Loading rules")
             for filename in os.listdir(rules_path):
-                if filename.endswith(".py"):
+                if Path(filename).suffix == ".py":
                     try:
-                        file_path = os.path.join(rules_path, filename)
+                        file_path = Path(rules_path, filename)
                         spec = importlib.util.spec_from_file_location(
                             "iac_validate.rules", file_path
                         )
@@ -61,13 +63,12 @@ class Validator:
             logger.info("No rules found")
         else:
             logger.error("Rules directory not found: {}".format(rules_path))
-            sys.exit(1)
+            raise typer.Exit(1)
 
-    def _validate_syntax_file(self, file_path: str, strict: bool = True) -> None:
+    def _validate_syntax_file(self, file_path: Path, strict: bool = True) -> None:
         """Run syntactic validation for a single file"""
-        filename = os.path.basename(file_path)
-        if os.path.isfile(file_path) and (".yaml" in filename or ".yml" in filename):
-            logger.info("Validate file: %s", filename)
+        if os.path.isfile(file_path) and file_path.suffix in [".yaml", ".yml"]:
+            logger.info("Validate file: %s", file_path)
 
             # YAML syntax validation
             data = None
@@ -101,7 +102,7 @@ class Validator:
                         logger.error(msg)
                         self.errors.append(msg)
 
-    def validate_syntax(self, input_paths: List[str], strict: bool = True) -> bool:
+    def validate_syntax(self, input_paths: list[Path], strict: bool = True) -> bool:
         """Run syntactic validation"""
         for input_path in input_paths:
             if os.path.isfile(input_path):
@@ -109,13 +110,13 @@ class Validator:
             else:
                 for dir, subdir, files in os.walk(input_path):
                     for filename in files:
-                        file_path = os.path.join(dir, filename)
+                        file_path = Path(dir, filename)
                         self._validate_syntax_file(file_path, strict)
         if self.errors:
             return True
         return False
 
-    def validate_semantics(self, input_paths: List[str]) -> bool:
+    def validate_semantics(self, input_paths: list[Path]) -> bool:
         """Run semantic validation"""
         if not self.rules:
             return False
@@ -141,7 +142,7 @@ class Validator:
                 self.errors.append(msg)
         return error
 
-    def write_output(self, input_paths: List[str], path: str) -> None:
+    def write_output(self, input_paths: list[Path], path: Path) -> None:
         if self.data is None:
             self.data = load_yaml_files(input_paths)
         try:

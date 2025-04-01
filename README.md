@@ -6,22 +6,24 @@
 A CLI tool to perform syntactic and semantic validation of YAML files.
 
 ```
-$ iac-validate -h
-Usage: iac-validate [OPTIONS] [PATHS]...
+$ iac-validate --help
 
-  A CLI tool to perform syntactic and semantic validation of YAML files.
-
-Options:
-  --version              Show the version and exit.
-  -v, --verbosity LVL    Either CRITICAL, ERROR, WARNING, INFO or DEBUG
-  -s, --schema FILE      Path to schema file. (optional, default:
-                         '.schema.yaml', env: IAC_VALIDATE_SCHEMA)
-  -r, --rules DIRECTORY  Path to semantic rules. (optional, default:
-                         '.rules/', env: IAC_VALIDATE_RULES)
-  -o, --output FILE      Write merged content from YAML files to a new YAML
-                         file. (optional, env: IAC_VALIDATE_OUTPUT)
-  --non-strict           Accept unexpected elements in YAML files.
-  -h, --help             Show this message and exit.
+ Usage: iac-validate [OPTIONS] PATHS...                                                                                                                                   
+                                                                                                                                                                          
+ A CLI tool to perform syntactic and semantic validation of YAML files.                                                                                                   
+                                                                                                                                                                          
+╭─ Arguments ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ *    paths      PATHS...  List of paths pointing to YAML files or directories. [default: None] [required]                                                              │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --verbosity   -v      [DEBUG|INFO|WARNING|ERROR|CRITICAL]  Verbosity level. [env var: IAC_VALIDATE_VERBOSITY] [default: WARNING]                                       │
+│ --schema      -s      FILE                                 Path to schema file. [env var: IAC_VALIDATE_SCHEMA] [default: .schema.yaml]                                 │
+│ --rules       -r      DIRECTORY                            Path to directory with semantic validation rules. [env var: IAC_VALIDATE_RULES] [default: .rules]           │
+│ --output      -o      FILE                                 Write merged content from YAML files to a new YAML file. [env var: IAC_VALIDATE_OUTPUT] [default: None]     │
+│ --non-strict                                               Accept unexpected elements in YAML files. [env var: IAC_VALIDATE_NON_STRICT]                                │
+│ --version                                                  Display version number.                                                                                     │
+│ --help                                                     Show this message and exit.                                                                                 │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
 Syntactic validation is done by basic YAML syntax validation (e.g., indentation) and by providing a [Yamale](https://github.com/23andMe/Yamale) schema and validating all YAML files against that schema. Semantic validation is done by providing a set of rules (implemented in Python) which are then validated against the YAML data. Every rule is implemented as a Python class and should be placed in a `.py` file located in the `--rules` path.
@@ -48,7 +50,7 @@ class Rule:
 
 ## Installation
 
-Python 3.7+ is required to install `iac-validate`. Don't have Python 3.7 or later? See [Python 3 Installation & Setup Guide](https://realpython.com/installing-python/).
+Python 3.10+ is required to install `iac-validate`. Don't have Python 3.10 or later? See [Python 3 Installation & Setup Guide](https://realpython.com/installing-python/).
 
 `iac-validate` can be installed in a virtual environment using `pip`:
 
@@ -63,7 +65,7 @@ The tool can be integrated via a [pre-commit](https://pre-commit.com/) hook with
 ```
 repos:
   - repo: https://github.com/netascode/iac-validate
-    rev: v0.1.6
+    rev: v0.3.0
     hooks:
       - id: iac-validate
 ```
@@ -73,7 +75,7 @@ In case the schema or validation rules are located somewhere else the required C
 ```
 repos:
   - repo: https://github.com/netascode/iac-validate
-    rev: v0.1.6
+    rev: v0.3.0
     hooks:
       - id: iac-validate
         args:
