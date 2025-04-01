@@ -18,16 +18,13 @@ jobs:
       - name: Python Setup
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.13"
+
+      - name: Install mypy
+        run: pip install mypy
 
       - name: Pre-commit Checks
         uses: pre-commit/action@v3.0.1
-
-      - name: Type Checks
-        run: |
-          pip install poetry
-          poetry install
-          poetry run mypy iac_validate
 
   test:
     name: Tests
