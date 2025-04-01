@@ -195,7 +195,7 @@ def test_merge(tmpdir: Path) -> None:
     output_path = os.path.join(tmpdir, "output.yaml")
     result_path = "tests/integration/fixtures/data_merge/result.yaml"
     result = runner.invoke(
-        iac_validate.cli.main.main,
+        iac_validate.cli.main.app,
         [
             "-o",
             output_path,
