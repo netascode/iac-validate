@@ -86,70 +86,64 @@ def load_yaml_files(paths: list[Path]) -> dict[str, Any]:
                         _load_file(Path(dir, filename), result)
                     except:  # noqa: E722
                         logger.warning("Could not load file: {}".format(filename))
+    result = deduplicate_list_items(result)
     return result
 
 
-def merge_list_item(
-    source_item: Any, destination: list[Any], merge_list_items: bool = True
-) -> None:
+def merge_list_item(source_item: Any, destination: list[Any]) -> None:
     """Merge item into list."""
-    if isinstance(source_item, dict) and merge_list_items:
+    if isinstance(source_item, dict):
         # check if we have an item in destination with matching primitives
         for dest_item in destination:
             match = True
             comparison = False
-            unique_source = False
-            unique_dest = False
             for k, v in source_item.items():
-                if isinstance(v, dict) or isinstance(v, list):
-                    continue
-                if k in dest_item and v == dest_item[k]:
-                    comparison = True
-                    continue
-                if k not in dest_item:
-                    unique_source = True
+                if isinstance(v, dict) or isinstance(v, list) or k not in dest_item:
                     continue
                 comparison = True
-                match = False
+                if v != dest_item[k]:
+                    match = False
             for k, v in dest_item.items():
-                if isinstance(v, dict) or isinstance(v, list):
-                    continue
-                if k in source_item and v == source_item[k]:
-                    comparison = True
-                    continue
-                if k not in source_item:
-                    unique_dest = True
+                if isinstance(v, dict) or isinstance(v, list) or k not in source_item:
                     continue
                 comparison = True
-                match = False
-            if comparison and match and not (unique_source and unique_dest):
-                merge_dict(source_item, dest_item, merge_list_items)
+                if v != source_item[k]:
+                    match = False
+            if comparison and match:
+                merge_dict(source_item, dest_item)
                 return
-    elif source_item in destination:
-        return
     destination.append(source_item)
 
 
-def merge_dict(
-    source: dict[Any, Any], destination: dict[Any, Any], merge_list_items: bool = True
-) -> dict[Any, Any]:
+def merge_dict(source: dict[Any, Any], destination: dict[Any, Any]) -> dict[Any, Any]:
     """Merge two nested dict/list structures."""
     if not source:
         return destination
     for key, value in source.items():
-        if isinstance(value, dict):
-            # get node or create one
-            node = destination.setdefault(key, {})
-            if node is None:
-                destination[key] = value
-            else:
-                merge_dict(value, node, merge_list_items)
+        if key not in destination:
+            destination[key] = value
+        elif isinstance(value, dict):
+            if isinstance(destination[key], dict):
+                merge_dict(value, destination[key])
         elif isinstance(value, list):
-            if key not in destination:
-                destination[key] = []
             if isinstance(destination[key], list):
-                for i in value:
-                    merge_list_item(i, destination[key], merge_list_items)
+                destination[key] += value
         else:
             destination[key] = value
     return destination
+
+
+def deduplicate_list_items(data: dict[Any, Any]) -> dict[Any, Any]:
+    """Deduplicate list items."""
+    for key, value in data.items():
+        if isinstance(value, dict):
+            deduplicate_list_items(value)
+        elif isinstance(value, list):
+            deduplicated_list: list[Any] = []
+            for i in value:
+                merge_list_item(i, deduplicated_list)
+            for i in deduplicated_list:
+                if isinstance(i, dict):
+                    deduplicate_list_items(i)
+            data[key] = deduplicated_list
+    return data

@@ -148,7 +148,9 @@ class Validator:
         try:
             with open(path, "w") as fh:
                 y = yaml.YAML()
+                y.explicit_start = True
                 y.default_flow_style = False
+                y.indent(mapping=2, sequence=4, offset=2)
                 y.dump(self.data, fh)
         except:  # noqa: E722
             logger.error("Cannot write file: {}".format(path))
