@@ -11,7 +11,7 @@ from typing_extensions import Annotated
 from pathlib import Path
 import errorhandler
 
-import iac_validate.validator
+import nac_validate.validator
 from .defaults import DEFAULT_SCHEMA, DEFAULT_RULES
 
 app = typer.Typer(add_completion=False)
@@ -50,7 +50,7 @@ class VerbosityLevel(str, Enum):
 
 def version_callback(value: bool) -> None:
     if value:
-        print(f"iac-validate, version {iac_validate.__version__}")
+        print(f"nac-validate, version {nac_validate.__version__}")
         raise typer.Exit()
 
 
@@ -71,7 +71,7 @@ Verbosity = Annotated[
         "-v",
         "--verbosity",
         help="Verbosity level.",
-        envvar="IAC_VALIDATE_VERBOSITY",
+        envvar="NAC_VALIDATE_VERBOSITY",
         is_eager=True,
     ),
 ]
@@ -86,7 +86,7 @@ Schema = Annotated[
         dir_okay=False,
         file_okay=True,
         help="Path to schema file.",
-        envvar="IAC_VALIDATE_SCHEMA",
+        envvar="NAC_VALIDATE_SCHEMA",
     ),
 ]
 
@@ -100,7 +100,7 @@ Rules = Annotated[
         dir_okay=True,
         file_okay=False,
         help="Path to directory with semantic validation rules.",
-        envvar="IAC_VALIDATE_RULES",
+        envvar="NAC_VALIDATE_RULES",
     ),
 ]
 
@@ -114,7 +114,7 @@ Output = Annotated[
         dir_okay=False,
         file_okay=True,
         help="Write merged content from YAML files to a new YAML file.",
-        envvar="IAC_VALIDATE_OUTPUT",
+        envvar="NAC_VALIDATE_OUTPUT",
     ),
 ]
 
@@ -124,7 +124,7 @@ NonStrict = Annotated[
     typer.Option(
         "--non-strict",
         help="Accept unexpected elements in YAML files.",
-        envvar="IAC_VALIDATE_NON_STRICT",
+        envvar="NAC_VALIDATE_NON_STRICT",
     ),
 ]
 
@@ -153,7 +153,7 @@ def main(
     """A CLI tool to perform syntactic and semantic validation of YAML files."""
     configure_logging(verbosity)
 
-    validator = iac_validate.validator.Validator(schema, rules)
+    validator = nac_validate.validator.Validator(schema, rules)
     error = validator.validate_syntax(paths, not non_strict)
     if error:
         exit()

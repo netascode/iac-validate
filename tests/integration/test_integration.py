@@ -11,7 +11,7 @@ from ruamel import yaml
 
 from pathlib import Path
 
-import iac_validate.cli.main
+import nac_validate.cli.main
 
 pytestmark = pytest.mark.integration
 
@@ -22,7 +22,7 @@ def test_validate() -> None:
     schema_path = "tests/integration/fixtures/schema/schema.yaml"
     rules_path = "tests/integration/fixtures/rules/"
     result = runner.invoke(
-        iac_validate.cli.main.app,
+        nac_validate.cli.main.app,
         [
             "-s",
             schema_path,
@@ -40,7 +40,7 @@ def test_validate_non_strict() -> None:
     schema_path = "tests/integration/fixtures/schema/schema.yaml"
     rules_path = "tests/integration/fixtures/rules/"
     result = runner.invoke(
-        iac_validate.cli.main.app,
+        nac_validate.cli.main.app,
         [
             "-s",
             schema_path,
@@ -60,7 +60,7 @@ def test_validate_vault() -> None:
     os.environ["ANSIBLE_VAULT_ID"] = "dev"
     os.environ["ANSIBLE_VAULT_PASSWORD"] = "Password123"
     result = runner.invoke(
-        iac_validate.cli.main.app,
+        nac_validate.cli.main.app,
         [
             "-s",
             schema_path,
@@ -77,7 +77,7 @@ def test_validate_env(tmpdir: Path) -> None:
     output_path = os.path.join(tmpdir, "output.yaml")
     os.environ["ABC"] = "DEF"
     result = runner.invoke(
-        iac_validate.cli.main.app,
+        nac_validate.cli.main.app,
         [
             "-s",
             schema_path,
@@ -99,7 +99,7 @@ def test_validate_empty_data() -> None:
     input_path = "tests/integration/fixtures/data_empty/"
     schema_path = "tests/integration/fixtures/schema/schema.yaml"
     result = runner.invoke(
-        iac_validate.cli.main.app,
+        nac_validate.cli.main.app,
         [
             "-s",
             schema_path,
@@ -117,7 +117,7 @@ def test_validate_additional_data() -> None:
     schema_path_fail = "tests/integration/fixtures/schema/schema.yaml"
     rules_path = "tests/integration/fixtures/rules/"
     result = runner.invoke(
-        iac_validate.cli.main.app,
+        nac_validate.cli.main.app,
         [
             "-s",
             schema_path,
@@ -129,7 +129,7 @@ def test_validate_additional_data() -> None:
     )
     assert result.exit_code == 0
     result = runner.invoke(
-        iac_validate.cli.main.app,
+        nac_validate.cli.main.app,
         [
             "-s",
             schema_path_fail,
@@ -147,7 +147,7 @@ def test_validate_syntax() -> None:
     input_path = "tests/integration/fixtures/data_syntax_error/"
     schema_path = "tests/integration/fixtures/schema/schema.yaml"
     result = runner.invoke(
-        iac_validate.cli.main.app,
+        nac_validate.cli.main.app,
         [
             "-s",
             schema_path,
@@ -162,7 +162,7 @@ def test_validate_semantics() -> None:
     input_path = "tests/integration/fixtures/data_semantic_error/"
     rules_path = "tests/integration/fixtures/rules/"
     result = runner.invoke(
-        iac_validate.cli.main.app,
+        nac_validate.cli.main.app,
         [
             "-r",
             rules_path,
@@ -177,7 +177,7 @@ def test_validate_output(tmpdir: Path) -> None:
     input_path = "tests/integration/fixtures/data/"
     output_path = os.path.join(tmpdir, "output.yaml")
     result = runner.invoke(
-        iac_validate.cli.main.app,
+        nac_validate.cli.main.app,
         [
             "-o",
             output_path,
@@ -195,7 +195,7 @@ def test_merge(tmpdir: Path) -> None:
     output_path = os.path.join(tmpdir, "output.yaml")
     result_path = "tests/integration/fixtures/data_merge/result.yaml"
     result = runner.invoke(
-        iac_validate.cli.main.app,
+        nac_validate.cli.main.app,
         [
             "-o",
             output_path,

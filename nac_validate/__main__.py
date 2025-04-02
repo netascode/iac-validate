@@ -2,7 +2,7 @@
 
 # Copyright: (c) 2022, Daniel Schmidt <danischm@cisco.com>
 
-import iac_validate.cli.main
+import nac_validate.cli.main
 
 if __name__ == "__main__":
-    iac_validate.cli.main.app()
+    nac_validate.cli.main.app()

@@ -1,14 +1,14 @@
-[![Tests](https://github.com/netascode/iac-validate/actions/workflows/test.yml/badge.svg)](https://github.com/netascode/iac-validate/actions/workflows/test.yml)
+[![Tests](https://github.com/netascode/nac-validate/actions/workflows/test.yml/badge.svg)](https://github.com/netascode/nac-validate/actions/workflows/test.yml)
 ![Python Support](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-informational "Python Support: 3.10, 3.11, 3.12, 3.13")
 
-# iac-validate
+# nac-validate
 
 A CLI tool to perform syntactic and semantic validation of YAML files.
 
 ```
-$ iac-validate --help
+$ nac-validate --help
 
- Usage: iac-validate [OPTIONS] PATHS...                                                                                                                                   
+ Usage: nac-validate [OPTIONS] PATHS...                                                                                                                                   
                                                                                                                                                                           
  A CLI tool to perform syntactic and semantic validation of YAML files.                                                                                                   
                                                                                                                                                                           
@@ -16,11 +16,11 @@ $ iac-validate --help
 │ *    paths      PATHS...  List of paths pointing to YAML files or directories. [default: None] [required]                                                              │
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --verbosity   -v      [DEBUG|INFO|WARNING|ERROR|CRITICAL]  Verbosity level. [env var: IAC_VALIDATE_VERBOSITY] [default: WARNING]                                       │
-│ --schema      -s      FILE                                 Path to schema file. [env var: IAC_VALIDATE_SCHEMA] [default: .schema.yaml]                                 │
-│ --rules       -r      DIRECTORY                            Path to directory with semantic validation rules. [env var: IAC_VALIDATE_RULES] [default: .rules]           │
-│ --output      -o      FILE                                 Write merged content from YAML files to a new YAML file. [env var: IAC_VALIDATE_OUTPUT] [default: None]     │
-│ --non-strict                                               Accept unexpected elements in YAML files. [env var: IAC_VALIDATE_NON_STRICT]                                │
+│ --verbosity   -v      [DEBUG|INFO|WARNING|ERROR|CRITICAL]  Verbosity level. [env var: NAC_VALIDATE_VERBOSITY] [default: WARNING]                                       │
+│ --schema      -s      FILE                                 Path to schema file. [env var: NAC_VALIDATE_SCHEMA] [default: .schema.yaml]                                 │
+│ --rules       -r      DIRECTORY                            Path to directory with semantic validation rules. [env var: NAC_VALIDATE_RULES] [default: .rules]           │
+│ --output      -o      FILE                                 Write merged content from YAML files to a new YAML file. [env var: NAC_VALIDATE_OUTPUT] [default: None]     │
+│ --non-strict                                               Accept unexpected elements in YAML files. [env var: NAC_VALIDATE_NON_STRICT]                                │
 │ --version                                                  Display version number.                                                                                     │
 │ --help                                                     Show this message and exit.                                                                                 │
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
@@ -50,12 +50,12 @@ class Rule:
 
 ## Installation
 
-Python 3.10+ is required to install `iac-validate`. Don't have Python 3.10 or later? See [Python 3 Installation & Setup Guide](https://realpython.com/installing-python/).
+Python 3.10+ is required to install `nac-validate`. Don't have Python 3.10 or later? See [Python 3 Installation & Setup Guide](https://realpython.com/installing-python/).
 
-`iac-validate` can be installed in a virtual environment using `pip`:
+`nac-validate` can be installed in a virtual environment using `pip`:
 
 ```
-pip install iac-validate
+pip install nac-validate
 ```
 
 ## Pre-Commit Hook
@@ -64,20 +64,20 @@ The tool can be integrated via a [pre-commit](https://pre-commit.com/) hook with
 
 ```
 repos:
-  - repo: https://github.com/netascode/iac-validate
+  - repo: https://github.com/netascode/nac-validate
     rev: v0.3.0
     hooks:
-      - id: iac-validate
+      - id: nac-validate
 ```
 
 In case the schema or validation rules are located somewhere else the required CLI arguments can be added like this:
 
 ```
 repos:
-  - repo: https://github.com/netascode/iac-validate
+  - repo: https://github.com/netascode/nac-validate
     rev: v0.3.0
     hooks:
-      - id: iac-validate
+      - id: nac-validate
         args:
           - '-s'
           - 'my_schema.yaml'

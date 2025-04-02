@@ -1,7 +1,7 @@
-- id: iac-validate
+- id: nac-validate
   name: Validate YAML files
   description: This hook performs syntactic and semantic validation of YAML files.
-  entry: iac-validate
+  entry: nac-validate
   language: python
   types: [file, yaml]
   exclude: (^\..+\.ya?ml$)|(^.*\/\.[^\/]+\.ya?ml$) # exclude hidden files and folders

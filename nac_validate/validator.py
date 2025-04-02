@@ -49,11 +49,11 @@ class Validator:
                     try:
                         file_path = Path(rules_path, filename)
                         spec = importlib.util.spec_from_file_location(
-                            "iac_validate.rules", file_path
+                            "nac_validate.rules", file_path
                         )
                         if spec is not None:
                             mod = importlib.util.module_from_spec(spec)
-                            sys.modules["iac_validate.rules"] = mod
+                            sys.modules["nac_validate.rules"] = mod
                             if spec.loader is not None:
                                 spec.loader.exec_module(mod)
                                 self.rules[mod.Rule.id] = mod.Rule
