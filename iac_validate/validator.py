@@ -17,7 +17,7 @@ import yamale
 from yamale.yamale_error import YamaleError
 
 from .cli.defaults import DEFAULT_SCHEMA, DEFAULT_RULES
-from .yaml import load_yaml_files
+from nac_yaml.yaml import write_yaml_file, load_yaml_files
 
 logger = logging.getLogger(__name__)
 
@@ -145,12 +145,4 @@ class Validator:
     def write_output(self, input_paths: list[Path], path: Path) -> None:
         if self.data is None:
             self.data = load_yaml_files(input_paths)
-        try:
-            with open(path, "w") as fh:
-                y = yaml.YAML()
-                y.explicit_start = True
-                y.default_flow_style = False
-                y.indent(mapping=2, sequence=4, offset=2)
-                y.dump(self.data, fh)
-        except:  # noqa: E722
-            logger.error("Cannot write file: {}".format(path))
+        write_yaml_file(self.data, path)

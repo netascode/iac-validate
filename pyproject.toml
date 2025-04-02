@@ -19,6 +19,7 @@ python = "~=3.10"
 ruamel-yaml = "~=0.16"
 typer = "~=0.15"
 yamale = "~=6.0"
+nac-yaml = "^0.1.0"
 
 [tool.poetry.group.dev.dependencies]
 ansible-core = "~=2.17"
