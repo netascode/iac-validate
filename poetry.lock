@@ -437,14 +437,14 @@ files = [
 
 [[package]]
 name = "nac-yaml"
-version = "0.1.0"
+version = "0.1.2"
 description = "A Python library with common YAML utility functions supporting 'Network as Code'."
 optional = false
 python-versions = "<4.0,>=3.10"
 groups = ["main"]
 files = [
-    {file = "nac_yaml-0.1.0-py3-none-any.whl", hash = "sha256:bbe39addc9062b3024078251fd25d014c2ada5225a5e594c8e8cb3e743df5938"},
-    {file = "nac_yaml-0.1.0.tar.gz", hash = "sha256:9d2410cdd016be060a8dcb35f28aa73659929d9b3dd0679b5ce8b21f9ed5ab75"},
+    {file = "nac_yaml-0.1.2-py3-none-any.whl", hash = "sha256:642f5dc01f1085dca6e9811611328aa651d4717592dbebb6ea012ac5466d2cba"},
+    {file = "nac_yaml-0.1.2.tar.gz", hash = "sha256:34249d896603d384f1e29e35f1d193c8f9d679e12e8eced73b567a071c258e1e"},
 ]
 
 [package.dependencies]
@@ -813,14 +813,14 @@ typing-extensions = ">=3.7.4.3"
 
 [[package]]
 name = "typing-extensions"
-version = "4.13.0"
+version = "4.13.1"
 description = "Backported and Experimental Type Hints for Python 3.8+"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "typing_extensions-4.13.0-py3-none-any.whl", hash = "sha256:c8dd92cc0d6425a97c18fbb9d1954e5ff92c1ca881a309c45f06ebc0b79058e5"},
-    {file = "typing_extensions-4.13.0.tar.gz", hash = "sha256:0a4ac55a5820789d87e297727d229866c9650f6521b64206413c4fbada24d95b"},
+    {file = "typing_extensions-4.13.1-py3-none-any.whl", hash = "sha256:4b6cf02909eb5495cfbc3f6e8fd49217e6cc7944e145cdda8caa3734777f9e69"},
+    {file = "typing_extensions-4.13.1.tar.gz", hash = "sha256:98795af00fb9640edec5b8e31fc647597b4691f099ad75f469a2616be1a76dff"},
 ]
 
 [[package]]
@@ -844,4 +844,4 @@ ruamel = ["ruamel.yaml"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~=3.10"
-content-hash = "1ae291c0d031d66da9f889d20ef63ca1011c61ee039d74b0d24ec18c97fe8130"
+content-hash = "8ecf736b7ea1f63a8d1e7e2c32ebba801ce105f63288d9bb7fe409a00669809e"

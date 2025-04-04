@@ -16,7 +16,7 @@ nac-validate = "nac_validate.cli.main:app"
 
 [tool.poetry.dependencies]
 errorhandler = "~=2.0"
-nac-yaml = "^0.1"
+nac-yaml = ">=0.1.2"
 python = "~=3.10"
 ruamel-yaml = "~=0.16"
 typer = "~=0.15"
