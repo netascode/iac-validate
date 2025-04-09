@@ -6,4 +6,6 @@ root:
     - item1
   dict_list:
     - name: abc
+  dict_list_extra:
+    - name: abc
       extra1: def

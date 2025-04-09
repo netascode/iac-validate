@@ -7,6 +7,10 @@ root:
     - item1
   dict_list:
     - name: abc
+      extra: def
+  dict_list_extra:
+    - name: abc
       extra1: def
+    - name: abc
       extra2: ghi
   attr2: value2
