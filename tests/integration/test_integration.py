@@ -170,6 +170,28 @@ def test_validate_semantics() -> None:
         ],
     )
     assert result.exit_code == 1
+    rules_path = "tests/integration/fixtures/rules_schema/"
+    result = runner.invoke(
+        nac_validate.cli.main.app,
+        [
+            "-r",
+            rules_path,
+            input_path,
+        ],
+    )
+    assert result.exit_code == 1
+    schema_path = "tests/integration/fixtures/schema/schema.yaml"
+    result = runner.invoke(
+        nac_validate.cli.main.app,
+        [
+            "-s",
+            schema_path,
+            "-r",
+            rules_path,
+            input_path,
+        ],
+    )
+    assert result.exit_code == 0
 
 
 def test_validate_output(tmpdir: Path) -> None:

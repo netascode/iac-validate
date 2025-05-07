@@ -4,6 +4,7 @@
 - Modernize CLI interface using [typer](https://github.com/fastapi/typer)
 - BREAKING CHANGE: Do not deduplicate items in a list of primitive values, for example a list of strings
 - BREAKING CHANGE: Deduplicate items in a list of dictionaries consistently, regardless of whether they are in the same file or not
+- Add option to get access to schema from semantic validation rules
 
 # 0.2.7
 

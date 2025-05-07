@@ -15,6 +15,7 @@ import typer
 from ruamel import yaml
 import yamale
 from yamale.yamale_error import YamaleError
+from inspect import signature
 
 from .cli.defaults import DEFAULT_SCHEMA, DEFAULT_RULES
 from nac_yaml.yaml import write_yaml_file, load_yaml_files
@@ -129,7 +130,11 @@ class Validator:
         results = {}
         for rule in self.rules.values():
             logger.info("Verifying rule id %s", rule.id)
-            paths = rule.match(self.data)
+            sig = signature(rule.match)
+            if len(sig.parameters) == 1:
+                paths = rule.match(self.data)
+            elif len(sig.parameters) == 2:
+                paths = rule.match(self.data, self.schema)
             if len(paths) > 0:
                 results[rule.id] = paths
         if len(results) > 0:
