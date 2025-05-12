@@ -8,7 +8,7 @@ maintainers = ["Daniel Schmidt <danischm@cisco.com>"]
 name = "nac-validate"
 readme = "README.md"
 repository = "https://github.com/netascode/nac-validate"
-version = "0.3.0a3"
+version = "1.0.0"
 
 [tool.poetry.scripts]
 iac-validate = "nac_validate.cli.main:app"

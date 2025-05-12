@@ -1,4 +1,4 @@
-# 0.3.0 (unreleased)
+# 1.0.0
 
 - BREAKING CHANGE: Rename tool from `iac-validate` to `nac-validate`
 - Modernize CLI interface using [typer](https://github.com/fastapi/typer)
