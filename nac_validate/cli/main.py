@@ -41,11 +41,11 @@ def configure_logging(level: str) -> None:
 
 
 class VerbosityLevel(str, Enum):
-    debug = "DEBUG"
-    info = "INFO"
-    warning = "WARNING"
-    error = "ERROR"
-    critical = "CRITICAL"
+    DEBUG = "DEBUG"
+    INFO = "INFO"
+    WARNING = "WARNING"
+    ERROR = "ERROR"
+    CRITICAL = "CRITICAL"
 
 
 def version_callback(value: bool) -> None:
@@ -143,7 +143,7 @@ Version = Annotated[
 @app.command()
 def main(
     paths: Paths,
-    verbosity: Verbosity = VerbosityLevel.warning,
+    verbosity: Verbosity = VerbosityLevel.WARNING,
     schema: Schema = DEFAULT_SCHEMA,
     rules: Rules = DEFAULT_RULES,
     output: Output = None,
