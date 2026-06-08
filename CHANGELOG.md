@@ -1,3 +1,7 @@
+# Unreleased
+
+- Fix syntax validation failure for empty or comment-only YAML files
+
 # 2.0.0
 
 - Add `RuleBase` base class for semantic validation rules

@@ -231,7 +231,7 @@ class Validator:
                 return
 
             # Schema syntax validation
-            if self.schema is None or data is None:
+            if self.schema is None or data == {}:
                 return
             try:
                 yamale.validate(self.schema, [(data, file_path)], strict=strict)

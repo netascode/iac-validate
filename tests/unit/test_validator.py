@@ -216,3 +216,23 @@ class TestDirectConstructor:
         v = Validator(schema, rules)
         assert v.schema is schema
         assert v.rules is rules
+
+
+class TestCommentOnlyFiles:
+    """Tests that comment-only/empty files don't cause validation errors."""
+
+    @patch("nac_validate.validator.load_yaml_files", return_value={})
+    def test_comment_only_file_no_syntax_error(self, mock_load: Any) -> None:
+        """A comment-only file produces {} and should not fail schema validation."""
+        schema = MagicMock()
+        v = Validator(schema=schema, rules={})
+        v.validate_syntax([Path("/tmp/comments.yaml")], strict=False, rich_output=False)
+        assert v.errors == []
+
+    @patch("nac_validate.validator.load_yaml_files", return_value={})
+    def test_empty_file_no_syntax_error(self, mock_load: Any) -> None:
+        """An empty file produces {} and should not fail schema validation."""
+        schema = MagicMock()
+        v = Validator(schema=schema, rules={})
+        v.validate_syntax([Path("/tmp/empty.yaml")], strict=False, rich_output=False)
+        assert v.errors == []
